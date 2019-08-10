@@ -211,6 +211,9 @@
 ## ステートを増やす
 ### ワーク: ステート3を追加し、ステート2の2つ目のボタンでステート3に遷移できるようにする
 - 「ステート追加」ボタンを押してステート3を追加します
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/add_state.png" width="300px">
+
 - HTMLのステート2の要素を下にコピペして、ステート3用の要素を追加します
     - `krt-if`の値を`"state==3"`に書き換えます
     - 詳細文、ボタンなどの要素を削除します
@@ -233,7 +236,13 @@
 ```
 
 - 「ベーシック > 表示設定 > ステート3」から、表示位置を右下などに変更します
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/state3_display_setting.png" width="300px">
+
 - 左上のステート選択ボタンから直接「ステート3」を選択し、ステート3が表示されることを確認します
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/state3_check.png" width="300px">
+
 - ステート2のボタンのボタンテキストに対応する静的変数の値を、以下のように変更します
     - 「ボタンテキスト1」 → 「別のページへ」
     - 「ボタンテキスト2」 → 「ステート3へ」
@@ -316,6 +325,8 @@
 - ステートをたくさん追加し、複数ボタンを使って複雑な分岐をさせることで、診断コンテンツの実装が可能
 - ストア > 接客シナリオ > 「診断コンテンツの結果に合わせておすすめのページへ誘導」
 
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/shindan.png" width="300px">
+
 ## サイト内ボタンの自動クリック
 - ※ [for App]ネイティブコンポーネントの自動クリックをJavaScriptから実装することは、残念ながらできません
 
@@ -328,6 +339,9 @@
         - Elementsタブの中で、該当の要素に対応するHTMLタグがハイライトされます
     - ハイライトされたHTMLタグを右クリックし、「Copy > Copy selector」を選択します
     - クリップボードにその要素を指定するCSSセレクタがコピーされます
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/copy_selector.png" width="300px">
+
 - WidgetのScriptの末尾に、以下を追加します
 
 ```js
@@ -347,6 +361,9 @@ widget.method('autoClick', function() {
 
 - ステート2のボタンのボタンテキスト3に対応する静的変数の値を、以下のように変更します
     - 「ボタンテキスト3」 → 「自動クリック！」
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/auto_click.png" width="300px">
+
 - アクションを保存し、テスト配信で動作確認します
     - うまくいけば、「自動クリック！」のボタンを押すと、ページ内の指定した要素が自動クリックされます
 
