@@ -23,7 +23,7 @@
 - Widgetとは、こうしたコンテンツの実装をより簡単にするためのKARTEの機能です
 - HTML/CSS/JavaScriptをそのまま記述するよりも、以下の点が簡単になっています
     - コンテンツのステート（状態）管理
-    - HTML（表示）とJavaScript（データや処理）との関連付け
+    - HTML（表示）とJavaScript（状態や処理）との関連付け
 
 ### Widgetタイプの接客サービスかどうかを見分ける方法
 - ブラウザやアプリ内で実行される接客サービスでだけ使用されます
@@ -64,8 +64,9 @@
 - 静的変数「ボタンテキスト1〜3」の値をベーシックタブから変更し、プレビューに反映されることを確認します
 
 ### 静的変数の使い方
-- 「静的変数」というのは、KARTEの用語
-- HTML/CSS/JavaScriptの中でよく変更する部分を静的変数にし、ベーシックタブから簡単にその値を変更できるようにする
+- 「静的変数」とは？（KARTEの用語）
+    - ベーシックタブで値を設定できる変数
+    - HTML/CSS/JavaScriptの中でよく変更する部分を静的変数にし、ベーシックタブから簡単にその値を変更できるようにする
 - HTMLなどから参照する方法
     - `#{変数名}`
         - 例: `#{margin}`
@@ -198,3 +199,183 @@
 - 詳細文に対応するHTML要素のclass名を特定します
 - CSSを加筆し、詳細文に下線を表示します
     - 指定方法は、Googleで検索してください
+
+## ステートを増やす
+### ワーク: ステート3を追加し、ステート2の2つ目のボタンでステート3に遷移できるようにする
+- 「ステート追加」ボタンを押してステート3を追加します
+- HTMLのステート2の要素を下にコピペして、ステート3用の要素を追加します
+    - `krt-if`の値を`"state==3"`に書き換えます
+    - 詳細文、ボタンなどの要素を削除します
+    - タイトル文言の部分を、「ここはステート3です！」のように直接書き換えます
+
+```html
+<div class="karte-temp-whole">
+    <div class="karte-temp-state1" krt-if="state==1" krt-on:click="setState(2)">
+        <!-- 中略 -->
+    </div>
+    <div class="karte-temp-state2" krt-if="state==2">
+        <!-- 中略 -->
+    </div>
+    <div class="karte-temp-state2" krt-if="state==3">
+        <div class="karte-temp-card">
+            <div class="karte-temp-title">ここはステート3です！</div>
+        </div>
+    </div>
+</div>
+```
+
+- 「ベーシック > 表示設定 > ステート3」から、表示位置を右下などに変更します
+- 左上のステート選択ボタンから直接「ステート3」を選択し、ステート3が表示されることを確認します
+- ステート2のボタンのボタンテキストに対応する静的変数の値を、以下のように変更します
+    - 「ボタンテキスト1」 → 「別のページへ」
+    - 「ボタンテキスト2」 → 「ステート3へ」
+- ステート2の2つ目のボタンに対応するHTMLを、以下のように書き換えます
+    - aタグをdivタグに変更
+    - href属性を削除
+    - krt-on:click属性を追加
+
+```html
+<!-- 変更前 -->
+<a class="karte-temp-btn karte-temp-hover" href="#{state2.link}">#{state2.btn2}</a>
+
+<!-- 変更後 -->
+<div class="karte-temp-btn karte-temp-hover" krt-on:click="setState(3)">#{state2.btn2}</div>
+```
+
+- ステート2の2つ目のボタンを押すとステート3に遷移することを確認
+
+### Widgetが提供するカスタムディレクティブ
+- カスタムディレクティブとは？（KARTEの用語）
+    - WidgetのHTMLで使用できるカスタムの属性
+        - 通常のHTMLでは使えない
+    - HTML要素とWidgetの状態や処理を紐付ける
+    - ディレクティブの値は、文字列ではなくJavaScriptとして解釈される
+        - つまり、条件文や処理を直接書ける
+- このコースで使うディレクティブ
+    - `krt-if="条件文"`
+        - 条件文が成立するときだけ、この要素を表示する
+        - 主にステート毎の表示切替のために利用されている
+    - `krt-on:event名="処理"`
+        - event名で指定したイベントが発生した場合に、指定した処理を実行
+            - eventについては後述
+        - 主に要素のクリック時の処理を設定するために利用されている
+- HTMLの中を改めて見てみましょう
+
+```html
+<div class="karte-temp-whole">
+    <div class="karte-temp-state1" krt-if="state==1" krt-on:click="setState(2)">
+        <!-- 中略 -->
+    </div>
+    <div class="karte-temp-state2" krt-if="state==2">
+        <!-- 中略 -->
+            <div class="karte-temp-btn karte-temp-hover" krt-on:click="setState(3)">#{state2.btn2}</div>
+        <!-- 中略 -->
+    </div>
+    <div class="karte-temp-state2" krt-if="state==3">
+        <!-- 中略 -->
+    </div>
+</div>
+```
+
+### Widgetが提供するステート関連メソッド
+- ステートとは？（KARTEの用語）
+    - Widgetが管理する表示状態
+    - ポップアップなどのコンテンツ内での表示切替に利用する
+- メソッドとは？（JavaScriptの用語）
+    - JavaScriptのオブジェクトに登録された関数（=処理）
+    - メソッド呼び出しの記述方法
+        - `オブジェクト名.メソッド名(引数)`
+        - 例
+            - `widget.setState(3)`
+- Widgetに対する一部の操作は、メソッドとして登録されている
+- ステートに関するWidgetのメソッド
+    - `widget.setState(n)`
+        - ステートをnに変更する
+    - `widget.show()`
+        - ステートを1に変更する
+        - `widget.setState(1)`と同じ
+    - `widget.hide()`
+        - ステートを0に変更する
+        - ステート0は、「非表示時」に対応している
+        - `widget.setState(0)`と同じ
+- HTMLの`krt-on:click=""`から直接呼び出す場合、`widget.`は不要
+
+### チャレンジ: ステート3に、ステート2へ戻るためのボタンを追加する
+- ステート3にボタンを追加
+- そのボタンをクリックすると、ステート2に戻る
+
+### 事例: 高度な分岐による診断コンテンツ
+- ステートをたくさん追加し、複数ボタンを使って複雑な分岐をさせることで、診断コンテンツの実装が可能
+- ストア > 接客シナリオ > 「診断コンテンツの結果に合わせておすすめのページへ誘導」
+
+## サイト内ボタンの自動クリック
+- ※ [for App]ネイティブコンポーネントの自動クリックをJavaScriptから実装することは、残念ながらできません
+
+### ワーク: ステート1の3つ目のボタンをクリックしたとき、サイト内のある要素を自動でクリックさせる
+- 配信対象のページを開きます
+- ページ内から、リンクなどクリック時に処理が発生する要素を見つけます
+- その要素を指定するCSSセレクタを特定します
+    - 要素の上で右クリックし、「検証」を選択します
+    - [Chromeデベロッパーツール](https://developers.google.com/web/tools/chrome-devtools/?hl=ja)が開きます
+        - Elementsタブの中で、該当の要素に対応するHTMLタグがハイライトされます
+    - ハイライトされたHTMLタグを右クリックし、「Copy > Copy selector」を選択します
+    - クリップボードにその要素を指定するCSSセレクタがコピーされます
+- WidgetのScriptの末尾に、以下を追加します
+
+```js
+var selector = 'コピーしたCSSセレクタ';
+var element = document.querySelector(selector);
+widget.method('autoClick', function() {
+    element.click();
+});
+```
+
+- HTMLを編集します
+    - ステート2のボタン3を、以下のHTMLで置き換えます
+
+```html
+<div class="karte-temp-btn karte-temp-hover" krt-on:click="autoClick()">#{state2.btn3}</div>
+```
+
+- ステート2のボタンのボタンテキスト3に対応する静的変数の値を、以下のように変更します
+    - 「ボタンテキスト3」 → 「自動クリック！」
+- アクションを保存し、テスト配信で動作確認します
+    - うまくいけば、「自動クリック！」のボタンを押すと、ページ内の指定した要素が自動クリックされます
+
+### サイト内要素の取得について
+- documentオブジェクトを使うことで、ページそのものの状態を取得したり、ページを操作したりできる
+    - KARTEの仕様ではなく、JavaScriptの仕様
+- `document.querySelector('CSSセレクタ')`
+    - CSSセレクタを指定して、ページ内の要素を取得する
+    - 取得した要素は、JavaScriptの変数に格納しておき、後から使うことができる
+- `要素.click()`
+    - 取得した要素をプログラムからクリックさせる
+
+```js
+var selector = 'コピーしたCSSセレクタ';
+var element = document.querySelector(selector);
+element.click();
+```
+
+- サイト内要素に依存したカスタマイズをすることには、一定のリスクがあります
+    - サイト側の現在の仕様や今後の仕様変更によって不具合が発生する可能性がある
+        - 常にあると思っていた要素が、一定の条件では表示されない仕様だった可能性
+        - サイトが改修され、サイト内要素が取得できなくなる可能性
+
+### Widgetにメソッドを新規追加する
+- `setState(n)`などの予めセットされたメソッド以外に、独自のメソッドをWidgetに追加することができます
+- メソッドを追加するための記述方法
+    - `widget.method('メソッド名', function() { 処理 })`
+
+```js
+widget.method('autoClick', function() {
+    element.click();
+});
+```
+
+- 追加したメソッドは、`setState(n)`などと同様、WidgetのHTML要素と関連づけることができます
+    - `krt-on:click=""`の値に指定します
+
+```html
+<div class="karte-temp-btn karte-temp-hover" krt-on:click="autoClick()">#{state2.btn3}</div>
+```
