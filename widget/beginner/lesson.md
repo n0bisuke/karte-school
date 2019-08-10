@@ -30,6 +30,8 @@
 - ステートに関する表示がある場合、Widgetが使われています
 
 ## 要素を増やす
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/template_thumbnail.png" width="300px">
+
 - カスタマイズする接客サービスを新規作成します
     - 使用するテンプレート
         - ユーザーに見せる > 旧テンプレート > ポップアップ > 「最小化-テキスト + ボタン（SC000018）」
@@ -39,6 +41,8 @@
         - 「同時配信を有効にする」にチェック
 
 ### ワーク: ボタンを3つに複製
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/copy_button.png" width="300px">
+
 - アクション編集画面のカスタマイズタブを開きます
 - HTMLの以下の部分を、3行に複製します
 
@@ -126,6 +130,8 @@
 
 ## 余白を調整する
 ### ワーク: CSSによるmarginの調整
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/set_margin.png" width="300px">
+
 - 3つに増やしたボタンの間の余白を追加します
 - ボタンに対応するHTML要素のclass属性を特定します
     - `karte-temp-btn karte-temp-hover`
@@ -170,7 +176,9 @@
 - CSSで実現されるWeb上のレイアウトのルールは、「ボックスモデル」と呼ばれています
     - すべての要素が長方形のボックスとして表される
 
-<img src="" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/margin_padding.png" width="300px">
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/box_model.png" width="300px">
 出典: https://developer.mozilla.org/ja/docs/Learn/CSS/Introduction_to_CSS/Box_model
 
 ### 代表的なCSSプロパティ
