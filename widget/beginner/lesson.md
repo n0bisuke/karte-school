@@ -327,6 +327,199 @@
 
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/shindan.png" width="300px">
 
+## KARTEへのイベント送信とユーザー情報変数
+### ワーク: ステートの状態が変わったらKARTEにイベント送信する
+- Scriptの末尾に、以下を追記
+    - ステートが変更される度に、testイベントを発生させる
+    - testイベントの中に、現在のステートを格納
+
+```js
+widget.onChangeVal('state', function(values) {
+    var eventName = 'test'; // 送信しても問題ないイベント名を指定してください
+    tracker.track(eventName, {
+        '#{campaign_id}': {
+            state: values.newVal
+        }
+    });
+});
+```
+
+- テスト配信を実施し、ステートを変更してみる
+- 自分のユーザー詳細画面から、testイベントが発生しているか確認
+    - 画面に反映されるまで、最大数十秒ほどタイムラグがある場合がある
+    - テスト配信セグメントから探すと探しやすい
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/track_event.png" width="300px">
+
+- testイベントの`接客サービスID.state`に最新のステートが格納されていることを確認
+
+### ステート変更検知
+- ステートの値は、`state`という名称でWidgetの動的変数として登録されています
+- Widgetの動的変数の値が変更したときに任意の処理を実行する記述方法は以下です
+
+```js
+widget.onChangeVal('動的変数の名前', function(values) {
+    // 処理
+});
+```
+
+### KARTEへのイベント送信
+- 計測タグが設置されたページでは、`tracker`というイベントトラッキング用のオブジェクトが使えるようになります
+- WidgetのScript内でも、この`tracker`を利用してKARTEにユーザー情報をイベントとして送信できます
+
+```js
+tracker.track('イベント名', {
+    フィールド名1: 値1,
+    フィールド名2: 値2,
+    ...
+});
+```
+
+- ワークの例では、接客サービス毎に別のフィールドに値を設定できるように、接客サービスのIDをフィールド名に含めています
+    - 静的変数`#{campaign_id}`を使うと、KARTEが自動で接客サービスIDを設定してくれます
+- KARTEにイベント送信することで、接客アクションの状態などをユーザー情報に保持できます
+    - セグメントへの利用
+    - ユーザー情報変数を使ったアクションへの埋め込み
+
+### ワーク: 前回のステートに応じて、初期表示時のステートを切り替える
+- 「ベーシック > データ管理 > ユーザー情報変数 > 追加」をクリック
+- 以下の内容で変数を作成
+    - 変数名
+        - `lastState`
+    - 条件
+        - すべての期間
+        - `test`（先ほどの手順で送信したイベント名）
+        - `接客サービスID.state`
+            - 接客サービスIDは、URLの`/service/`の直後
+        - 最新の値
+    - デフォルト値
+        - `1`
+    - プレビューの値
+        - `2`
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/user_data_variable.png" width="300px">
+
+- Scriptの`widget.show()`の部分を、以下のように書き換えます
+
+```js
+var lastState = [[lastState]];
+if (lastState === '2') {
+    widget.setState(2);
+} else {
+    widget.show();
+}
+```
+
+- プレビュー画面での動作確認
+    - 「アクション再実行」ボタンを押し、ステート2から表示されることを確認します
+- テスト配信での動作確認
+    - 離脱時の最後のステートに応じて、再読み込み時の初期表示ステートが変化することを確認します
+        - 素早く操作しすぎるとユーザー情報の更新が間に合わないことがあります
+
+### ユーザー情報変数
+- 接客アクションに、配信先ユーザーのユーザー情報を埋め込んで配信することができます
+    - セグメントと同様の設定で参照するユーザー情報を指定
+- 参照できる情報は、「[ユーザー詳細画面 > ユーザーデータ](https://support2.karte.io/userbh/userbh-userdetail/1588/#index)」から確認できます
+
+### 事例: ユーザー情報変数を利用した閲覧履歴一覧やお気に入り一覧の表示
+- 閲覧履歴
+    - テンプレート > スクリプト実行 > 「閲覧アイテム情報取得スクリプト」
+    - テンプレート > ユーザーに見せる > 「直近閲覧アイテムリスト」
+- お気に入り
+    - テンプレート > ユーザーに見せる > 「お気に入りボタン」
+    - テンプレート > ユーザーに見せる > 「お気に入りアイテムリスト」
+
+### [for Web]その他のデータ保存領域
+- Webの場合は、KARTEのユーザー情報以外にも、JavaScriptからデータを読み書きできる領域があります
+    - ブラウザのcookie
+    - ブラウザのlocalStorage
+
+## JavaScriptのデバッグについて
+- デバッグとは？（一般用語）
+    - プログラムの誤り（=バグ）を見つけて、それを直すこと
+- アクションを修正した場合の結果の検証をどうやるか？
+    - 細かい修正の結果はプレビューで確認
+        - Scriptを修正した場合は、Scriptタブ最下部の「アクション再実行」ボタンを押す
+    - ある程度の修正がまとまったらテスト配信で確認
+        - 実際に配信したときしか発生しない不具合もある
+        - 以下に該当するアクションは、特にテスト配信で確認した方が良い
+            - サイト側のページ遷移をともなう
+            - KARTEへのイベント送信をすることがある
+            - ユーザー情報変数を使っている
+
+### ChromeデベロッパーツールのConsoleタブ
+- バグの原因を特定する方法
+    - プログラムを熟読する
+        - 非効率
+    - [Chromeデベロッパーツール](https://developers.google.com/web/tools/chrome-devtools/?hl=ja)のConsoleタブを活用する
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_tab.png" width="300px">
+
+- JavaScriptが思った通りに動作しないとき
+    - Consoleにエラーが出ていないか確認する
+        - 出ている場合は、その内容をヒントにバグ原因のあたりをつける
+    - WidgetのScriptに`console.log("ログの内容")`を足す
+        - プログラム中に分岐がある場合、どの分岐に入ったか調べる
+        - 変数がある場合、その値を調べる
+
+### ワーク: バグのあるプログラムをデバッグする
+- 初期表示ステートを指定した以下の部分に、バグを含めてみます
+    - ifの条件内を以下のように修正します
+
+```js
+var lastState = [[lastState]];
+if (lastStata === '2') { // lastState -> lastStataにしてみる
+    widget.setState(2);
+} else {
+    widget.show();
+}
+```
+
+- 「アクション再実行」ボタンを押しても接客が表示されないことを確認します
+    - つまり、バグがある状態です
+- [Chromeデベロッパーツール](https://developers.google.com/web/tools/chrome-devtools/?hl=ja)のConsoleタブを開きます
+- 左上の🚫Clear Consoleボタンを押してConsoleをキレイにします
+- 再び「アクション再実行」ボタンを押します
+- 以下のように、エラーメッセージが表示されます
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_error.png" width="300px">
+
+- エラーメッセージで最も大事なのは、最初の行です
+
+```
+karte.tracker error: ReferenceError: lastStata is not defined
+```
+
+- 「`lastStata`は定義されていません」というエラーから、変数名を間違えていたことがわかります
+- 変数名を`lastState`に修正して、エラーが出なくなることを確認しましょう
+
+### ワーク: デバッグ用のログを出力する
+- 今度は、以下のようにScriptに3つのログ出力処理を追加してみます
+
+```js
+var lastState = [[lastState]];
+console.log("lastState: " + lastState);
+if (lastState === '2') {
+    console.log("分岐1です！");
+    widget.setState(2);
+} else {
+    console.log("分岐2です！");
+    widget.show();
+}
+```
+
+- 左上の🚫Clear Consoleボタンを押してConsoleをキレイにします
+- 「アクション再実行」ボタンを押します
+- 以下のように、ログが表示されます
+    - 変数lastStateには、ユーザー情報変数の「プレビューの値」で指定した2が格納されていることがわかります
+    - また、if文による分岐は「分岐1」に進んでいることがわかります
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_log.png" width="300px">
+
+- このように、`console.log()`で動作を確かめたい処理の中にログをたくさん書くことで、プログラムの挙動をより詳細に知ることができます
+- 最後に、デバッグに使ったログを削除します
+    - エンドユーザーにログが見えてしまったり、開発者が見たいログに紛れてしまったりするため
+
 ## サイト内ボタンの自動クリック
 - ※ [for App]ネイティブコンポーネントの自動クリックをJavaScriptから実装することは、残念ながらできません
 
