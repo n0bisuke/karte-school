@@ -173,6 +173,32 @@
 }
 ```
 
+### [for Web]Widgetのclass名自動変換
+- 1つのページにつき、HTMLとCSSはそれぞれ1つしかありません
+    - つまり、KARTEで配信するHTMLとCSSは、サイト側でもともと実装されているHTMLとCSSに挿入されます
+- CSSの競合が発生すると、以下のような不具合が発生する可能性があります
+    - Widgetで指定したCSSが、サイトのスタイルを上書きしてしまう
+    - サイトで指定したCSSが、Widgetのスタイルを上書きしてしまう
+    - 複数のWidgetを同時に配信した場合、お互いのスタイルを上書きしてしまう
+- Widgetには、こうしたCSSの競合を防ぐための仕組みが組み込まれています
+    - 編集画面で指定したclass名が、実配信では接客アクションのIDを含む名前に自動で書き換わる
+
+```html
+<!-- WidgetのHTML抜粋 -->
+<div class="karte-temp-card">
+    <div class="karte-temp-title">#{state2.title}</div>
+    <div class="karte-temp-description">#{state2.description1}</div>
+    <div class="karte-temp-description">#{state2.description2}</div>
+    <a class="karte-temp-btn karte-temp-hover" href="#{state2.link}">#{state2.btn1}</a>
+    <div class="karte-temp-btn karte-temp-hover" krt-on:click="setState(3)">#{state2.btn2}</div>
+    <div class="karte-temp-btn karte-temp-hover" krt-on:click="autoClick()">#{state2.btn3}</div>
+</div>
+```
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/css_module.png" width="300px">
+
+- 参考: [CSSのモジュール化を理解する](https://developers.karte.io/docs/understand-css-modules)
+
 ### CSSボックスモデル
 - CSSで実現されるWeb上のレイアウトのルールは、「ボックスモデル」と呼ばれています
     - すべての要素が長方形のボックスとして表される
@@ -429,6 +455,11 @@ if (lastState === '2') {
     - テンプレート > ユーザーに見せる > 「お気に入りボタン」
     - テンプレート > ユーザーに見せる > 「お気に入りアイテムリスト」
 
+### 事例: チャット終了後にアンケートを表示する
+- チャット表示用の接客サービスを閉じたときに、別のアンケート用接客サービスを表示する
+    - チャット接客をカスタマイズし、「チャットパネルを閉じたらイベントを発生させる」という処理を追加する
+    - そのイベントをトリガーに、アンケート用接客サービスを配信する
+
 ### [for Web]その他のデータ保存領域
 - Webの場合は、KARTEのユーザー情報以外にも、JavaScriptからデータを読み書きできる領域があります
     - ブラウザのcookie
@@ -520,9 +551,7 @@ if (lastState === '2') {
 - 最後に、デバッグに使ったログを削除します
     - エンドユーザーにログが見えてしまったり、開発者が見たいログに紛れてしまったりするため
 
-## サイト内ボタンの自動クリック
-- ※ [for App]ネイティブコンポーネントの自動クリックをJavaScriptから実装することは、残念ながらできません
-
+## [for Web]サイト内ボタンの自動クリック
 ### ワーク: ステート1の3つ目のボタンをクリックしたとき、サイト内のある要素を自動でクリックさせる
 - 配信対象のページを開きます
 - ページ内から、リンクなどクリック時に処理が発生する要素を見つけます
@@ -597,3 +626,75 @@ widget.method('autoClick', function() {
 ```html
 <div class="karte-temp-btn karte-temp-hover" krt-on:click="autoClick()">#{state2.btn3}</div>
 ```
+
+## [for Web]サイト内要素のクリックで接客を表示
+### ワーク: サイト内のある要素をクリックしたときにwidget.show()する
+- Scriptの以下の部分をコメントアウトし、`widget.show()`だけに戻します
+
+```js
+// var lastState = [[lastState]];
+// console.log("lastState: " + lastState);
+// if (lastState === '2') {
+//     console.log("分岐1です！");
+//     widget.setState(2);
+// } else {
+//     console.log("分岐2です！");
+//     widget.show();
+// }
+widget.show();
+```
+
+- 配信対象のページを開きます
+- ページ内から、クリック時に処理が発生しない要素を見つけます
+    - 実際には、接客表示用のボタンをサイト側に設置することを想定しています
+- その要素を指定するCSSセレクタを特定します
+    - どこかにコピーしておきます
+- Scriptの`widget.show()`の部分を以下のように書き換えます
+
+```js
+var selector2 = 'コピーしたCSSセレクタ';
+var element2 = document.querySelector(selector2);
+
+element2.addEventListener('click', function() {
+    widget.show();
+});
+```
+
+- アクションを保存し、テスト配信で動作確認します
+    - うまくいけば、サイト内の要素をクリックすると、接客が表示されます
+
+### HTMLとeventとイベントリスナー
+- eventとは？(HTML/JavaScriptの仕様)
+    - Webページ上でユーザーがある要素に対してクリックやスワイプなどの操作をした場合に、その要素に対して発生するもの
+    - KARTEの「イベント」とは異なります
+- 主なevent
+    - click
+        - クリック、タップされた
+    - mouseover
+        - マウスポインタが要素に重なった（PCのみ）
+    - keydown
+        - キーボードが押された
+    - change
+        - input要素の値が変更された
+    - scroll
+        - スクロールした
+- イベントリスナーとは？(HTML/JavaScriptの仕様)
+    - eventが発生した場合の処理を、要素に後から追加することができる
+- イベントリスナの追加方法
+
+```js
+var element = document.querySelector('CSSセレクタ名');
+element.addEventListener('event名', function() {
+    // 処理
+});
+```
+
+### 事例: ユーザーのページ操作に応じた接客表示
+- スクロール率が一定を超えたら接客表示
+- マウスポインタがページ表示エリアから離脱したら接客表示
+
+### 事例: 特定の操作をした人だけにKARTEでイベント送信
+- スクリプト配信し、ページを下までスクロールした人だけに、読了を示すイベントを発火
+    - セグメントなどで利用
+- ページ内の特定要素をクリックした人だけに、クリックイベントを発火
+    - ただし、ページ遷移をともなう場合はイベント送信が間に合わないことがある
