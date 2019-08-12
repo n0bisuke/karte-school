@@ -11,6 +11,10 @@
 - このコースは、非エンジニアの方の受講を想定したものです
 - Widgetのカスタマイズを実践する中で、HTML/CSSと、特にJavaScriptを学ぶことができます
 - JavaScriptの文法解説よりも、「JavaScriptを書くと何ができるか」を体感することを重視しています
+    - そのため、今回のコースを元に、カスタマイズの実践の中で長期的にJavaScriptを学んでいただくことを前提としています
+
+### 事前課題の確認
+- 
 
 ### テスト配信環境の確認
 - ご自身のKARTE環境で、自分だけに本番環境でテスト配信をすることができるかをご確認ください
@@ -27,7 +31,9 @@
 
 ### Widgetタイプの接客サービスかどうかを見分ける方法
 - ブラウザやアプリ内で実行される接客サービスでだけ使用されます
-- ステートに関する表示がある場合、Widgetが使われています
+- アクション編集画面にステートに関する次のような表示がある場合、Widgetが使われています
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/state_ui.png" width="300px">
 
 ## 要素を増やす
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/template_thumbnail.png" width="300px">
@@ -698,3 +704,47 @@ element.addEventListener('event名', function() {
     - セグメントなどで利用
 - ページ内の特定要素をクリックした人だけに、クリックイベントを発火
     - ただし、ページ遷移をともなう場合はイベント送信が間に合わないことがある
+
+## おわりに
+### 今回の内容のおさらい
+- 表示要素を増やす場合、HTMLのそれに対応する部分を複製します
+    - 文言などを別々に設定するためには、静的変数も新たに作成する
+    - 余白が崩れた場合は、CSSでmarginやpaddingを設定する
+- ステートを増やす場合も、HTMLの既存のステート全体に対応する部分を複製します
+    - `krt-if="state==n"`を指定した要素内は、ステートがnのときしか表示されません
+    - `krt-on:click="setState(n)"`を指定した要素をクリックすると、ステートがnに遷移します
+- ユーザー毎に表示を切り替える場合、KARTEにイベント送信しその値をユーザー情報変数として利用します
+    - イベント送信するには、`tracker.track('イベント名', 値を示すオブジェクト)`を利用します
+- JavaScriptのデバッグをするには、ChromeデベロッパーツールのConsoleタブを駆使します
+    - 文法エラーがある場合は、Consoleにその旨が表示されます
+    - `console.log('ログの内容')`をプログラム中に追加することで、プログラム実行時の変数の値や分岐の様子を知ることができます
+- [for Web]サイト内要素と接客サービスを関連づけるには、ChromeデベロッパーツールでCSSセレクタを特定し、要素をJavaScriptで取得します
+    - 要素の取得には、`document.querySelector('CSSセレクタ')`を使います
+    - 要素の自動クリックは、`要素.click()`で実現できます
+    - 要素に対してユーザーが操作をすると、対応するeventが発生します
+        - event発生時の処理は、`要素.addEventListener('event名', function() { 処理 })`と書くことで追加できます
+
+### 事後課題の確認
+- 
+
+### 今後の学習
+- プログラミング学習のコツは、「try! try! try!」
+    - 書籍やオンライン学習コンテンツで学ぶのは、後からでも遅くない
+    - 「やってみる → 不明点にぶつかる → 調べる → わかる」のサイクルを回す
+    - 学習効率を上げるには、わかる人にとにかく質問すること
+        - KARTEのカスタマイズに関する質問は、Slackへ
+- 信頼できる情報源を知る
+    - [MDN](https://developer.mozilla.org/ja/docs/Web)
+        - Firefoxブラウザを開発するMozillaが運営するサイト
+        - HTML/CSS/JavaScriptを中心に、Webブラウザの標準仕様が紹介されている
+    - [Qiita](https://qiita.com/)
+        - プログラマ向けの技術情報共有サービス
+        - ユーザー投稿型なので玉石混交だが、より実践的な調べ物に役に立つことがある
+- おすすめ学習コンテンツ
+    - 書籍
+        - [『非エンジニアのためのJavaScript』](https://booth.pm/ja/items/1311888)
+    - オンラインコンテンツ
+        - [ドットインストール](https://dotinstall.com/)
+            - 3分動画で手軽に学べるプログラミング学習サービス
+        - [Progate](https://prog-8.com/)
+            - 初心者向けプログラミング学習サイト
