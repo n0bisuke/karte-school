@@ -45,6 +45,7 @@
     - その他の配信設定
         - アクセス毎
         - 「同時配信を有効にする」にチェック
+- テスト配信し、自分だけに表示されることを確認します
 
 ### ワーク: ボタンを3つに複製
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/copy_button.png" width="300px">
@@ -58,12 +59,13 @@
 <a class="karte-temp-btn karte-temp-hover" href="#{state2.link}">#{state2.btn}</a>
 ```
 
-- 別々の変数で文言を設定できるように、`state2.btn`という静的変数を3つに増やします
+- 別々の変数で文言を設定できるように、`state2.btn`という静的変数を3つの変数に分割します
     - `state2.btn`の変数名を`state2.btn1`に、表示名を`ボタンテキスト1`に変更
-    - 変数を2つ追加
+    - 変数を2つ追加し、同様に設定
         - `state2.btn2`
         - `state2.btn3`
 - HTMLの変数参照側も変更します
+    - 本来は変数`state2.link`も分割すべきですが、後で編集するのでこのままにします
 
 ```html
 <a class="karte-temp-btn karte-temp-hover" href="#{state2.link}">#{state2.btn1}</a>
@@ -80,11 +82,12 @@
 - HTMLなどから参照する方法
     - `#{変数名}`
         - 例: `#{margin}`
-    - `#{フォルダ名.変数名}`
-        - 例: `#{state2.btn1}`
+        - フォルダに入っている場合は、`#{フォルダ名.変数名}`
+            - 例: `#{state2.btn1}`
 
 ### 代表的なHTMLタグ
-- HTMLタグはたくさんありますが、役割が決まっているタグ以外は、ほぼ同じです
+- HTMLタグの種類はたくさんありますが、そのほとんどは覚える必要はありません
+    - 役割が決まっているHTMLタグを除けば、divとspanだけを覚えれば大抵の表現は可能です
 - HTMLタグ毎に、指定できる属性が異なることがあります
 - 主な「役割が決まっているHTMLタグ」
     - aタグ
@@ -109,21 +112,22 @@
         - div、h1、p、ul、li
     - インライン要素（主にテキスト以外の要素を内包しない）
         - span、i、label
-- 役割が決まっているHTMLタグを除けば、divとspanだけを覚えれば大抵の表現は可能
 
 ### コラム: HTMLタグとセマンティクス
 - なぜHTMLタグの種類はこんなにたくさんあるのか？
+    - 種類数でいうと、100以上
 - HTMLタグの種類が多い理由
     1. 歴史的な経緯
         - もともと、HTML内でスタイルを指定するのが一般的だった
-        - スタイルを指定するためのHTML要素があった
+        - そのため、スタイルを指定するためのHTML要素があった
             - iタグ: イタリック
             - uタグ: アンダーライン
             - bタグ: 太字
         - その後、CSSの登場によりHTMLでスタイルを指定する必要が無くなった
     2. セマンティクスのため
-        - 各要素のドキュメント上の意味を伝えてあげること
-        - セマンティクスに配慮することで、人間には見た目が同じでも、プログラムにより良く意味を伝えられるようになる
+        - 「セマンティクス」とは、プログラムが持つ「意味」のこと
+            - HTMLでは、各要素のドキュメント上の意味
+        - セマンティクスに配慮することで、人間には見た目が同じでも、プログラムにわかりやすく意味を伝えられるようになる
             - SEO、アクセシビリティ向上
         - 主なセマンティック要素
             - h1〜6タグ: 見出し
@@ -131,18 +135,21 @@
             - sectionタグ: セクション
             - headerタグ、footerタグ: ヘッダー、フッター
 
-### チャレンジ: 詳細文も増やしてみる
+### チャレンジ: 詳細文を2つに増やす
 - 詳細文を2つに増やしてみましょう
-    - 内容を設定する静的変数も、2つにしてみます
+    - 内容を設定する静的変数も2つにして、別々に値を設定できるようにします
 
 ## 余白を調整する
 ### ワーク: CSSによるmarginの調整
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/set_margin.png" width="300px">
 
-- 3つに増やしたボタンの間の余白を追加します
-- ボタンに対応するHTML要素のclass属性を特定します
-    - `karte-temp-btn karte-temp-hover`
-- CSSタブの中から、`karte-temp-btn`に対応するスタイル指定を見つけて加筆します
+- 3つに増やしたボタンは、間が詰まっています
+    - このボタンとボタンの間の余白を追加します
+- まず、ボタンに対応するHTML要素のclass属性を特定します
+    - HTML要素は、`<a class="karte-temp-btn karte-temp-hover" href="#{state2.link}">#{state2.btn1}</a>`
+    - そのclass名は、`karte-temp-btn`と`karte-temp-hover`
+        - ボタンとしてのスタイルは、名前から`karte-temp-btn`とわかる
+- CSSタブの中から、`karte-temp-btn`に対応するスタイル指定を見つけて`margin-top`の指定を追加します
 
 ```css
 .karte-temp-btn {
@@ -150,6 +157,8 @@
     /* 中略 */
 }
 ```
+
+- プレビューで余白が広がったことを確認します
 
 ### HTMLのclass属性とCSS
 - HTMLのclass属性は、CSSで指定したスタイルをHTMLの要素と対応づけるために使われます
@@ -180,9 +189,10 @@
 ```
 
 ### [for Web]Widgetのclass名自動変換
-- 1つのページにつき、HTMLとCSSはそれぞれ1つしかありません
-    - つまり、KARTEで配信するHTMLとCSSは、サイト側でもともと実装されているHTMLとCSSに挿入されます
-- CSSの競合が発生すると、以下のような不具合が発生する可能性があります
+- 1つのWebページにつき、HTMLとCSSはそれぞれ1つずつしかありません
+    - そのWebページで表示される全てのコンテンツは、そのHTMLとCSSの塊たちで表現されます
+    - つまり、KARTEで配信するHTMLとCSSは、サイト側でもともと実装されているHTMLとCSSに追加される形で利用されます
+- CSS内で利用したCSSセレクタが広すぎると、指定したスタイルが意図していない部分にも適用されてしまうことがあります
     - Widgetで指定したCSSが、サイトのスタイルを上書きしてしまう
     - サイトで指定したCSSが、Widgetのスタイルを上書きしてしまう
     - 複数のWidgetを同時に配信した場合、お互いのスタイルを上書きしてしまう
@@ -201,7 +211,7 @@
 </div>
 ```
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/css_module.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/css_module.png" width="800px">
 
 - 参考: [CSSのモジュール化を理解する](https://developers.karte.io/docs/understand-css-modules)
 
@@ -209,10 +219,13 @@
 - CSSで実現されるWeb上のレイアウトのルールは、「ボックスモデル」と呼ばれています
     - すべての要素が長方形のボックスとして表される
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/margin_padding.png" width="300px">
-
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/box_model.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/box_model.png" width="600px">
 出典: https://developer.mozilla.org/ja/docs/Learn/CSS/Introduction_to_CSS/Box_model
+
+- 実際の要素の「ボックス」は、Chromeデベロッパーツールで確認することができます
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/margin_padding.png" width="800px">
+
 
 ### 代表的なCSSプロパティ
 - ボックスモデルに関するプロパティ
@@ -235,9 +248,9 @@
     - text-decoration
         - 下線など
 
-### チャレンジ: 詳細文に下線を引いてみる
-- 詳細文に対応するHTML要素のclass名を特定します
-- CSSを加筆し、詳細文に下線を表示します
+### チャレンジ: 「詳細文」に下線を引いてみる
+- 「詳細文」に対応するHTML要素のclass名を特定します
+- CSSを加筆し、「詳細文」に下線を表示します
     - 指定方法は、Googleで検索してください
 
 ## ステートを増やす
@@ -275,7 +288,7 @@
 
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/state3_check.png" width="300px">
 
-- ステート2のボタンのボタンテキストに対応する静的変数の値を、以下のように変更します
+- ステート2の「ボタンテキスト」に対応する静的変数の値を、以下のように変更します
     - 「ボタンテキスト1」 → 「別のページへ」
     - 「ボタンテキスト2」 → 「ステート3へ」
 - ステート2の2つ目のボタンに対応するHTMLを、以下のように書き換えます
@@ -294,12 +307,12 @@
 - ステート2の2つ目のボタンを押すとステート3に遷移することを確認
 
 ### Widgetが提供するカスタムディレクティブ
-- カスタムディレクティブとは？（KARTEの用語）
+- [Widgetのカスタムディレクティブ](https://developers.karte.io/reference)とは？（KARTEの用語）
     - WidgetのHTMLで使用できるカスタムの属性
         - 通常のHTMLでは使えない
-    - HTML要素とWidgetの状態や処理を紐付ける
+    - 「HTML要素」と「Widgetの状態やメソッド」とを紐付ける
     - ディレクティブの値は、文字列ではなくJavaScriptとして解釈される
-        - つまり、条件文や処理を直接書ける
+        - つまり、HTML属性の中に条件文や処理を直接書ける
 - このコースで使うディレクティブ
     - `krt-if="条件文"`
         - 条件文が成立するときだけ、この要素を表示する
@@ -326,10 +339,10 @@
 </div>
 ```
 
-### Widgetが提供するステート関連メソッド
+### Widgetが提供する、ステートに関するメソッド
 - ステートとは？（KARTEの用語）
-    - Widgetが管理する表示状態
-    - ポップアップなどのコンテンツ内での表示切替に利用する
+    - Widgetが管理する、表示状態を指定するための番号
+    - コンテンツ内での表示切替に利用する
 - メソッドとは？（JavaScriptの用語）
     - JavaScriptのオブジェクトに登録された関数（=処理）
     - メソッド呼び出しの記述方法
@@ -379,14 +392,17 @@ widget.onChangeVal('state', function(values) {
 - テスト配信を実施し、ステートを変更してみる
 - 自分のユーザー詳細画面から、testイベントが発生しているか確認
     - 画面に反映されるまで、最大数十秒ほどタイムラグがある場合がある
-    - テスト配信セグメントから探すと探しやすい
 
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/track_event.png" width="300px">
 
 - testイベントの`接客サービスID.state`に最新のステートが格納されていることを確認
 
 ### ステート変更検知
-- ステートの値は、`state`という名称でWidgetの動的変数として登録されています
+- Widgetの動的変数とは？（KARTEの用語）
+    - Widgetに登録された変数
+    - 静的変数とは異なり、ユーザーの操作によって動的に変わることがある
+    - ステートやユーザーの入力値などを管理するために使う
+- ステートの値は、`state`という名称でWidgetの「動的変数」として登録されています
 - Widgetの動的変数の値が変更したときに任意の処理を実行する記述方法は以下です
 
 ```js
@@ -397,7 +413,8 @@ widget.onChangeVal('動的変数の名前', function(values) {
 
 ### KARTEへのイベント送信
 - 計測タグが設置されたページでは、`tracker`というイベントトラッキング用のオブジェクトが使えるようになります
-- WidgetのScript内でも、この`tracker`を利用してKARTEにユーザー情報をイベントとして送信できます
+- WidgetのScript内でも、この`tracker`を利用してKARTEにイベントを送信できます
+    - イベントには、イベント名と複数の値を含めることができます
 
 ```js
 tracker.track('イベント名', {
@@ -409,9 +426,20 @@ tracker.track('イベント名', {
 
 - ワークの例では、接客サービス毎に別のフィールドに値を設定できるように、接客サービスのIDをフィールド名に含めています
     - 静的変数`#{campaign_id}`を使うと、KARTEが自動で接客サービスIDを設定してくれます
+
+```js
+var eventName = 'test';
+tracker.track(eventName, {
+    '#{campaign_id}': {
+        state: values.newVal
+    }
+});
+```
+
 - KARTEにイベント送信することで、接客アクションの状態などをユーザー情報に保持できます
-    - セグメントへの利用
-    - ユーザー情報変数を使ったアクションへの埋め込み
+    - イベントによって更新されたユーザー情報は、主に以下に使えます
+        - セグメントへの利用
+        - ユーザー情報変数を使ったアクションへの埋め込み
 
 ### ワーク: 前回のステートに応じて、初期表示時のステートを切り替える
 - 「ベーシック > データ管理 > ユーザー情報変数 > 追加」をクリック
@@ -422,7 +450,7 @@ tracker.track('イベント名', {
         - すべての期間
         - `test`（先ほどの手順で送信したイベント名）
         - `接客サービスID.state`
-            - 接客サービスIDは、URLの`/service/`の直後
+            - 接客サービスIDは、URLの`/service/`の直後から確認できる
         - 最新の値
     - デフォルト値
         - `1`
@@ -487,7 +515,6 @@ if (lastState === '2') {
 ### ChromeデベロッパーツールのConsoleタブ
 - バグの原因を特定する方法
     - プログラムを熟読する
-        - 非効率
     - [Chromeデベロッパーツール](https://developers.google.com/web/tools/chrome-devtools/?hl=ja)のConsoleタブを活用する
 
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_tab.png" width="300px">
@@ -551,11 +578,17 @@ if (lastState === '2') {
     - 変数lastStateには、ユーザー情報変数の「プレビューの値」で指定した2が格納されていることがわかります
     - また、if文による分岐は「分岐1」に進んでいることがわかります
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_log.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_log.png" width="800px">
 
 - このように、`console.log()`で動作を確かめたい処理の中にログをたくさん書くことで、プログラムの挙動をより詳細に知ることができます
 - 最後に、デバッグに使ったログを削除します
     - エンドユーザーにログが見えてしまったり、開発者が見たいログに紛れてしまったりするため
+
+---
+
+ここから先は、Web版のKARTEのみで使える内容になります。
+
+---
 
 ## [for Web]サイト内ボタンの自動クリック
 ### ワーク: ステート1の3つ目のボタンをクリックしたとき、サイト内のある要素を自動でクリックさせる
@@ -568,7 +601,7 @@ if (lastState === '2') {
     - ハイライトされたHTMLタグを右クリックし、「Copy > Copy selector」を選択します
     - クリップボードにその要素を指定するCSSセレクタがコピーされます
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/copy_selector.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/copy_selector.png" width="400px">
 
 - WidgetのScriptの末尾に、以下を追加します
 
@@ -654,7 +687,7 @@ widget.show();
 - ページ内から、クリック時に処理が発生しない要素を見つけます
     - 実際には、接客表示用のボタンをサイト側に設置することを想定しています
 - その要素を指定するCSSセレクタを特定します
-    - どこかにコピーしておきます
+    - 手順は、先ほどと同様です
 - Scriptの`widget.show()`の部分を以下のように書き換えます
 
 ```js
@@ -728,7 +761,7 @@ element.addEventListener('event名', function() {
 - 
 
 ### 今後の学習
-- プログラミング学習のコツは、「try! try! try!」
+- プログラミング学習のコツは、失敗を恐れずにひたすら「try! try! try!」すること
     - 書籍やオンライン学習コンテンツで学ぶのは、後からでも遅くない
     - 「やってみる → 不明点にぶつかる → 調べる → わかる」のサイクルを回す
     - 学習効率を上げるには、わかる人にとにかく質問すること
