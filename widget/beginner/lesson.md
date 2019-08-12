@@ -1,4 +1,4 @@
-# KARTE School: Widget Customize 初級
+# Widget Customize 初級: 本編
 ## はじめに
 ### インストラクター紹介
 - https://github.com/plaidev/karte-school/tree/master/_instructors
