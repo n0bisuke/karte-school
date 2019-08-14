@@ -36,18 +36,8 @@
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/state_ui.png" width="300px">
 
 ## 2. 要素を増やす
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/template_thumbnail.png" width="300px">
-
-- カスタマイズする接客サービスを新規作成します
-    - 使用するテンプレート
-        - ユーザーに見せる > 旧テンプレート > ポップアップ > 「最小化-テキスト + ボタン（SC000018）」
-    - 必ず、テスト配信用セグメントによる絞り込みをしてください
-    - その他の配信設定
-        - アクセス毎
-        - 「同時配信を有効にする」にチェック
-- テスト配信し、自分だけに表示されることを確認します
-
 ### 2-1. ワーク: ボタンを3つに複製
+
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/copy_button.png" width="300px">
 
 - アクション編集画面のカスタマイズタブを開きます
@@ -412,7 +402,8 @@ widget.onChangeVal('動的変数の名前', function(values) {
 ```
 
 ### 5-3. KARTEへのイベント送信
-- 計測タグが設置されたページでは、`tracker`というイベントトラッキング用のオブジェクトが使えるようになります
+- Web版のKARTEでは、計測タグが設置されたページで`tracker`というイベントトラッキング用のオブジェクトが使えるようになります
+    - for Appの場合は、SDKが同じ役割を担います
 - WidgetのScript内でも、この`tracker`を利用してKARTEにイベントを送信できます
     - イベントには、イベント名と複数の値を含めることができます
 
@@ -457,7 +448,7 @@ tracker.track(eventName, {
     - プレビューの値
         - `2`
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/user_data_variable.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/user_data_variable.png" width="500px">
 
 - Scriptの`widget.show()`の部分を、以下のように書き換えます
 
@@ -517,7 +508,7 @@ if (lastState === '2') {
     - プログラムを熟読する
     - [Chromeデベロッパーツール](https://developers.google.com/web/tools/chrome-devtools/?hl=ja)のConsoleタブを活用する
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_tab.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_tab.png" width="600px">
 
 - JavaScriptが思った通りに動作しないとき
     - Consoleにエラーが出ていないか確認する
@@ -546,7 +537,7 @@ if (lastStata === '2') { // lastState -> lastStataにしてみる
 - 再び「アクション再実行」ボタンを押します
 - 以下のように、エラーメッセージが表示されます
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_error.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/console_error.png" width="800px">
 
 - エラーメッセージで最も大事なのは、最初の行です
 
