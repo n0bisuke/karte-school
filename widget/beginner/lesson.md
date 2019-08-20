@@ -3,6 +3,12 @@
 ### インストラクター紹介
 - https://github.com/plaidev/karte-school/tree/master/_instructors
 
+### 参加者自己紹介
+- 企業名
+- お名前
+- 職種
+    - 自分自身がKARTEでどんなことをしているか
+
 ### このコースのゴール
 - Widgetのカスタマイズによってできることを知る
 - 簡単なWidgetのカスタマイズができるようになる
