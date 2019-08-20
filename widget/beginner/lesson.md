@@ -402,10 +402,21 @@ widget.onChangeVal('動的変数の名前', function(values) {
 ```
 
 ### 5-3. KARTEへのイベント送信
-- Web版のKARTEでは、計測タグが設置されたページで`tracker`というイベントトラッキング用のオブジェクトが使えるようになります
-    - for Appの場合は、SDKが同じ役割を担います
-- WidgetのScript内でも、この`tracker`を利用してKARTEにイベントを送信できます
+- KARTEのユーザーデータは、イベントと呼ばれる単位で管理されています
     - イベントには、イベント名と複数の値を含めることができます
+- 接客サービスの表示やクリックなどに関しては、自動で以下のようなイベントが発生します
+    - 参考: [主要なイベント | KARTEサポートサイト](https://support.karte.io/post/67LppL36ssbFztyOjUzaqZ)
+
+イベント名 | 発生タイミング
+-- | --
+message_open | 接客サービスを表示
+message_click | 接客サービスのリンクをクリック
+message_close | 接客サービスを閉じる
+_message_state_changed | 接客サービスのステート変更（設定時のみ）
+
+- WidgetのScript内からも、KARTEに任意のイベントを送信することができます
+    - `tracker`というイベントトラッキング用のオブジェクトを利用します
+    - ちなみにWeb版のKARTEでも、計測タグが設置されたページ上で`tracker`が使えるようになります
 
 ```js
 tracker.track('イベント名', {
