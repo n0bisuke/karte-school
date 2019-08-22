@@ -426,6 +426,7 @@ _message_state_changed | 接客サービスのステート変更（設定時の�
 - WidgetのScript内からも、KARTEに任意のイベントを送信することができます
     - `tracker`というイベントトラッキング用のオブジェクトを利用します
     - ちなみにWeb版のKARTEでも、計測タグが設置されたページ上で`tracker`が使えるようになります
+    - 参考: [リファレンス - tracker | KARTE developers portal](https://developers.karte.io/reference#jssdk-tracker)
 
 ```js
 tracker.track('イベント名', {
@@ -750,13 +751,20 @@ element.addEventListener('event名', function() {
 
 ### 8-3. 事例: ユーザーのページ操作に応じた接客表示
 - スクロール率が一定を超えたら接客表示
+  - [スクロール率に応じてコンテンツを表示](https://admin.karte.io/store/svc/588894f3d26cc4f94f5c2e11)
+  - [上へ戻るボタンをスクロールナビで表示し、快適な操作体験を](https://admin.karte.io/store/svc/58059584e6472d851ddf7904)
+  - [記事ページ閲覧ユーザーにメディアの価値を伝えてスムーズに会員登録に誘導（ビズヒント）｜KARTE CX Clip｜KARTE CX Clip](https://cxclip.karte.io/practice/bizhint-case01/)
+  - [最も良い情報の届け方を考える。アパレルECサイト「PAL CLOSET」のWeb接客｜KARTE CX Clip｜KARTE CX Clip](https://cxclip.karte.io/interview/2515/)
 - マウスポインタがページ表示エリアから離脱したら接客表示
+  - [離脱しそうなユーザーにオススメ商品をご紹介](https://admin.karte.io/store/svc/58192c6d8349239572374200)
 
 ### 8-4. 事例: 特定の操作をした人だけにKARTEでイベント送信
 - スクリプト配信し、ページを下までスクロールした人だけに、読了を示すイベントを発火
     - セグメントなどで利用
+    - [記事コンテンツ読了後にアンケートを表示し、データを行動分析に活用（一番搾りブランドサイト）｜KARTE CX Clip｜KARTE CX Clip](https://cxclip.karte.io/practice/kirin-case01/)
 - ページ内の特定要素をクリックした人だけに、クリックイベントを発火
     - ただし、ページ遷移をともなう場合はイベント送信が間に合わないことがある
+    - [チャット終了後にアンケートを実施し満足度を調査](https://admin.karte.io/store/svc/5c11d66f516e5108a2bd5a66)
 
 ## おわりに
 ### 今回の内容のおさらい
@@ -796,6 +804,11 @@ element.addEventListener('event名', function() {
 - おすすめ学習コンテンツ
     - 書籍
         - [『非エンジニアのためのJavaScript』](https://booth.pm/ja/items/1311888)
+          - 講義終了後に slack にてPDFをお配りいたします。ぜひご一読ください。
+        - [スラスラ読める JavaScript ふりがなプログラミング (ふりがなプログラミングシリーズ）](https://www.amazon.co.jp/dp/4295003859)
+          - JavaScriptを順を追って見やすく解説しているドリルのように練習しながら学ぶ本です。非エンジニアにとても読みやすいテイストになっています。
+        - [HTML&CSS&JavaScript辞典 第7版](https://www.amazon.co.jp/dp/4798050229/)
+          - 講義中に参考図書としてご利用いただいた本です。HTML,CSS,JSを索引から調べることもできるので、今後も1冊お手元にあるとよいかも知れません。
     - オンラインコンテンツ
         - [ドットインストール](https://dotinstall.com/)
             - 3分動画で手軽に学べるプログラミング学習サービス
