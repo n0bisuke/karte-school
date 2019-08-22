@@ -497,14 +497,18 @@ if (lastState === '2') {
 - 閲覧履歴
     - テンプレート > スクリプト実行 > 「閲覧アイテム情報取得スクリプト」
     - テンプレート > ユーザーに見せる > 「直近閲覧アイテムリスト」
+    - [サイト上に簡易に閲覧履歴機能を導入](https://admin.karte.io/store/svc/58219c257a7ed7cf3b2266f8)
+    - [スマホで閲覧履歴を表示して回遊性を高めるとともにコンバージョン率アップ（サンプル百貨店）｜KARTE CX Clip｜KARTE CX Clip](https://cxclip.karte.io/practice/sample-case03/)
 - お気に入り
     - テンプレート > ユーザーに見せる > 「お気に入りボタン」
     - テンプレート > ユーザーに見せる > 「お気に入りアイテムリスト」
+    - [サイトに「お気に入り機能」をKARTEで簡単実装（LUXA）｜KARTE CX Clip｜KARTE CX Clip](https://cxclip.karte.io/practice/luxa-case01/)
 
 ### 5-7. 事例: チャット終了後にアンケートを表示する
 - チャット表示用の接客サービスを閉じたときに、別のアンケート用接客サービスを表示する
     - チャット接客をカスタマイズし、「チャットパネルを閉じたらイベントを発生させる」という処理を追加する
     - そのイベントをトリガーに、アンケート用接客サービスを配信する
+    - [チャット終了後にアンケートを実施し満足度を調査](https://admin.karte.io/store/svc/5c11d66f516e5108a2bd5a66)
 
 ### 5-8. [for Web]その他のデータ保存領域
 - Webの場合は、KARTEのユーザー情報以外にも、JavaScriptからデータを読み書きできる領域があります
@@ -764,7 +768,6 @@ element.addEventListener('event名', function() {
     - [記事コンテンツ読了後にアンケートを表示し、データを行動分析に活用（一番搾りブランドサイト）｜KARTE CX Clip｜KARTE CX Clip](https://cxclip.karte.io/practice/kirin-case01/)
 - ページ内の特定要素をクリックした人だけに、クリックイベントを発火
     - ただし、ページ遷移をともなう場合はイベント送信が間に合わないことがある
-    - [チャット終了後にアンケートを実施し満足度を調査](https://admin.karte.io/store/svc/5c11d66f516e5108a2bd5a66)
 
 ## おわりに
 ### 今回の内容のおさらい
