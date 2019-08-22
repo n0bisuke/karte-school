@@ -303,7 +303,7 @@
 - ステート2の2つ目のボタンを押すとステート3に遷移することを確認
 
 ### 4-2. Widgetが提供するカスタムディレクティブ
-- [Widgetのカスタムディレクティブ](https://developers.karte.io/reference)とは？（KARTEの用語）
+- [Widgetのカスタムディレクティブ](https://developers.karte.io/reference#template)とは？（KARTEの用語）
     - WidgetのHTMLで使用できるカスタムの属性
         - 通常のHTMLでは使えない
     - 「HTML要素」と「Widgetの状態やメソッド」とを紐付ける
@@ -357,10 +357,13 @@
         - ステート0は、「非表示時」に対応している
         - `widget.setState(0)`と同じ
 - HTMLの`krt-on:click=""`から直接呼び出す場合、`widget.`は不要
+- 参考: [リファレンス - widget | developers.karte.io](https://developers.karte.io/reference#widget)
 
 ### 4-4. 事例: 高度な分岐による診断コンテンツ
 - ステートをたくさん追加し、複数ボタンを使って複雑な分岐をさせることで、診断コンテンツの実装が可能
 - ストア > 接客シナリオ > 「診断コンテンツの結果に合わせておすすめのページへ誘導」
+  - https://admin.karte.io/store/svc/58192cb38349239572374202
+  - ご自身のプロジェクトを選択すると、当該接客シナリオのページにリダイレクトします
 
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/shindan.png" width="300px">
 
