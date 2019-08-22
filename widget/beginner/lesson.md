@@ -425,6 +425,9 @@ _message_state_changed | 接客サービスのステート変更（設定時の�
 
 - WidgetのScript内からも、KARTEに任意のイベントを送信することができます
     - `tracker`というイベントトラッキング用のオブジェクトを利用します
+    - イベント名には、自由に名前を設定できます
+        - 半角小文字英字(a-z)、半角数字(0-9)と'_'のみ使用できます
+        - 参考: [アクションでカスタムイベントを送信する | KARTEサポートサイト](https://support.karte.io/post/2DmFyL2Dd929nRYO4wSej8#1-0)
     - ちなみにWeb版のKARTEでも、計測タグが設置されたページ上で`tracker`が使えるようになります
     - 参考: [リファレンス - tracker | KARTE developers portal](https://developers.karte.io/reference#jssdk-tracker)
 
@@ -434,6 +437,12 @@ tracker.track('イベント名', {
     フィールド名2: 値2,
     ...
 });
+```
+
+- 値が不要な場合は、イベント名だけを渡して実行することもできます
+
+```js
+tracker.track('イベント名');
 ```
 
 - ワークの例では、接客サービス毎に別のフィールドに値を設定できるように、接客サービスのIDをフィールド名に含めています
