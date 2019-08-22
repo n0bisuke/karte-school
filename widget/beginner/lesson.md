@@ -755,10 +755,8 @@ element.addEventListener('event名', function() {
 
 ### 8-3. 事例: ユーザーのページ操作に応じた接客表示
 - スクロール率が一定を超えたら接客表示
-  - [スクロール率に応じてコンテンツを表示](https://admin.karte.io/store/svc/588894f3d26cc4f94f5c2e11)
   - [上へ戻るボタンをスクロールナビで表示し、快適な操作体験を](https://admin.karte.io/store/svc/58059584e6472d851ddf7904)
   - [記事ページ閲覧ユーザーにメディアの価値を伝えてスムーズに会員登録に誘導（ビズヒント）｜KARTE CX Clip｜KARTE CX Clip](https://cxclip.karte.io/practice/bizhint-case01/)
-  - [最も良い情報の届け方を考える。アパレルECサイト「PAL CLOSET」のWeb接客｜KARTE CX Clip｜KARTE CX Clip](https://cxclip.karte.io/interview/2515/)
 - マウスポインタがページ表示エリアから離脱したら接客表示
   - [離脱しそうなユーザーにオススメ商品をご紹介](https://admin.karte.io/store/svc/58192c6d8349239572374200)
 
