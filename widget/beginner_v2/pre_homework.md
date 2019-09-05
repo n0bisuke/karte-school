@@ -28,7 +28,7 @@
 - [ ] 以下の記事を参考に、ご自身のテストセグメントの作成をお願いします
     - [特定ユーザーにのみテスト配信することはできますか？ | KARTEサポートサイト](https://support2.karte.io/note/note-test/1313/)
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/template_thumbnail.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/b000023.png" width="300px">
 
 - [ ] コース中にカスタマイズする接客サービスを、以下の手順で新規作成してください
     - 使用するテンプレート
