@@ -60,7 +60,7 @@
     - 選択肢は、「はい」と「いいえ」のみ
     - 左上の数字が、Widgetのステートに対応
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/shindan_design.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/shindan_design.png" width="800px">
 
 ## 1. Widgetとは何か？
 - KARTEでは、ブラウザやネイティブアプリにHTML/CSS/JavaScriptで記述されたコンテンツを配信できます
@@ -79,7 +79,7 @@
 - テンプレートにすでにある要素を複製して増やす方法を紹介します
 
 ### 2-1. ワーク: ステートを1つ増やす
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/state2_check.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/state2_check.png" width="400px">
 
 - アクション編集画面を開きます
 - 右サイドバーの「アクション設定」から、以下を設定します
@@ -136,7 +136,7 @@ description2 | 文字列 | ''(空文字) | 詳細文2
 - 右上の「保存」ボタンを押します
 - ちなみに、「ベーシック > 表示設定 > ステート2」から、表示位置を右下などに変更できます
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/state2_display_setting.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/state2_display_setting.png" width="400px">
 
 ### 2-2. 静的変数の使い方
 - 「静的変数」とは？（KARTEの用語）
@@ -440,7 +440,7 @@ btn_background2 | カラー | (青) | ボタン背景色2
 ### 4-4. ワーク: 残りのステートを追加する
 - 以下の診断シナリオを参考に、残りのステートを追加します
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/shindan_design.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/shindan_design.png" width="800px">
 
 - 「ステート追加」ボタンを3回押し、ステート3〜5を追加します
 
@@ -579,7 +579,7 @@ widget.onChangeVal('state', function(values) {
 - 自分のユーザー詳細画面から、testイベントが発生しているか確認
     - 画面に反映されるまで、最大数十秒ほどタイムラグがある場合がある
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/track_event.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/track_event.png" width="800px">
 
 - testイベントの`接客サービスID.state`に最新のステートが格納されていることを確認
 
@@ -742,7 +742,7 @@ if (lastState === '0') {
     - プログラムを熟読する
     - [Chromeデベロッパーツール](https://developers.google.com/web/tools/chrome-devtools/?hl=ja)のConsoleタブを活用する
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/console_tab.png" width="600px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/console_tab.png" width="800px">
 
 - JavaScriptが思った通りに動作しないとき
     - Consoleにエラーが出ていないか確認する
@@ -811,7 +811,7 @@ if (lastState === '0') {
     - 変数lastStateには、ユーザー情報変数の「プレビューの値」で指定した3が格納されていることがわかります
     - また、if文による分岐は「分岐3」に進んでいることがわかります
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/console_log.png" width="800px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/console_log.png" width="600px">
 
 - このように、`console.log()`で動作を確かめたい処理の中にログをたくさん書くことで、プログラムの挙動をより詳細に知ることができます
 - 最後に、デバッグに使ったログを削除します
@@ -834,7 +834,7 @@ if (lastState === '0') {
     - ハイライトされたHTMLタグを右クリックし、「Copy > Copy selector」を選択します
     - クリップボードにその要素を指定するCSSセレクタがコピーされます
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/copy_selector.png" width="400px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/copy_selector.png" width="600px">
 
 - WidgetのScriptの末尾に、以下を追加します
 
