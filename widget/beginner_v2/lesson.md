@@ -245,7 +245,7 @@ btn2 | 文字列 | いいえ | ボタンテキスト2
 
 ```css
 .karte-temp-btn {
-    margin-top: 10px;
+    margin-top: 10px; /* ボタンの上マージンを指定 */
     /* 中略 */
 }
 ```
@@ -351,10 +351,10 @@ btn_background2 | カラー | (青) | ボタン背景色2
 
 ```css
 .yes {
-    background: #{btn_background};
+    background: #{btn_background}; /* 「はい」ボタンの背景色 */
 }
 .no {
-    background: #{btn_background2};
+    background: #{btn_background2}; /* 「いいえ」ボタンの背景色 */
 }
 ```
 
@@ -560,10 +560,15 @@ link5 | URL | (任意のURL) | リンク先URL5
     - testイベントの中に、現在のステートを格納
 
 ```js
+// 動的変数stateが変化したときに実行される関数を登録
 widget.onChangeVal('state', function(values) {
-    var eventName = 'test'; // 送信しても問題ないイベント名を指定してください
+    // 発生させるイベント名を指定（問題ある場合は変更してください）
+    var eventName = 'test';
+    // イベント名と値を指定して、イベントを発生させる
     tracker.track(eventName, {
+        // イベントの値に接客サービスIDを含める
         '#{campaign_id}': {
+            // イベントの値に最新のステートを含める
             state: values.newVal
         }
     });
@@ -588,7 +593,7 @@ widget.onChangeVal('state', function(values) {
 
 ```js
 widget.onChangeVal('動的変数の名前', function(values) {
-    // 処理
+    // 動的変数が変化したときに実行したい処理を記述
 });
 ```
 
@@ -631,9 +636,13 @@ tracker.track('イベント名');
     - 静的変数`#{campaign_id}`を使うと、KARTEが自動で接客サービスIDを設定してくれます
 
 ```js
+// 変数eventNameに、発生させるイベント名を格納（問題ある場合は変更してください）
 var eventName = 'test';
+// イベント名と値を指定して、イベントを発生させる
 tracker.track(eventName, {
+    // イベントの値に接客サービスIDを含める
     '#{campaign_id}': {
+        // イベントの値に最新のステートを含める
         state: values.newVal
     }
 });
@@ -665,12 +674,18 @@ tracker.track(eventName, {
 - Scriptの`widget.show()`の部分を、以下のように書き換えます
 
 ```js
+// 変数lastStateに前回のステート値を格納
 var lastState = [[lastState]];
+// もしlastStateの値が'0'だったら
 if (lastState === '0') {
+    // ステート1を初期表示
     widget.setState(1);
+// もしlastStateの値が'2'だったら
 } else if (lastState === '2') {
+    // ステート1を初期表示
     widget.setState(1);
 } else {
+    // 前回の最後のステートを初期表示
     widget.setState(lastState);
 }
 ```
@@ -773,14 +788,18 @@ karte.tracker error: ReferenceError: lastStata is not defined
 
 ```js
 var lastState = [[lastState]];
+// 変数lastStateの値をログに出力
 console.log("lastState: " + lastState);
 if (lastState === '0') {
+    // 分岐1に入ったことを知るためのログを出力
     console.log("分岐1です！");
     widget.setState(1);
 } else if (lastState === '2') {
+    // 分岐2に入ったことを知るためのログを出力
     console.log("分岐2です！");
     widget.setState(1);
 } else {
+    // 分岐3に入ったことを知るためのログを出力
     console.log("分岐3です！");
     widget.setState(lastState);
 }
@@ -820,10 +839,15 @@ if (lastState === '0') {
 - WidgetのScriptの末尾に、以下を追加します
 
 ```js
+// 変数selectorに、CSSセレクタを格納
 var selector = 'コピーしたCSSセレクタ';
+// 変数elementに、対象のHTML要素を格納
 var element = document.querySelector(selector);
+// widgetのメソッドにautoClickを新規追加
 widget.method('autoClick', function() {
+    // 対象のHTML要素を自動クリック
     element.click();
+    // widgetを閉じる
     widget.hide();
 });
 ```
@@ -848,8 +872,11 @@ widget.method('autoClick', function() {
     - 取得した要素をプログラムからクリックさせる
 
 ```js
+// 変数selectorに、CSSセレクタを格納
 var selector = 'コピーしたCSSセレクタ';
+// 変数elementに、対象のHTML要素を格納
 var element = document.querySelector(selector);
+// 対象のHTML要素を自動クリック
 element.click();
 ```
 
@@ -864,8 +891,12 @@ element.click();
     - `widget.method('メソッド名', function() { 処理 })`
 
 ```js
+// widgetのメソッドにautoClickを新規追加
 widget.method('autoClick', function() {
+    // 対象のHTML要素を自動クリック
     element.click();
+    // widgetを閉じる
+    widget.hide();
 });
 ```
 
@@ -881,6 +912,9 @@ widget.method('autoClick', function() {
 
 ### 8-1. ワーク: サイト内のある要素をクリックしたときにwidget.show()する
 - Scriptの以下の部分をコメントアウトします
+    - 対象範囲を選択して、以下のショートカット
+        - Windows: `[Ctrl] + [/]`
+        - Mac: `[Cmd] + [/]`
 
 ```js
 // var lastState = [[lastState]];
@@ -901,10 +935,14 @@ widget.method('autoClick', function() {
 - Scriptの冒頭に以下を追記します
 
 ```js
+// 変数selector2に、CSSセレクタを格納
 var selector2 = 'コピーしたCSSセレクタ';
+// 変数element2に、対象のHTML要素を格納
 var element2 = document.querySelector(selector2);
 
+// 対象のHTML要素に、click時に実行される関数を登録
 element2.addEventListener('click', function() {
+    // widgetを表示
     widget.show();
 });
 ```
@@ -932,9 +970,11 @@ element2.addEventListener('click', function() {
 - イベントリスナの追加方法
 
 ```js
+// 変数elementに、対象のHTML要素を格納
 var element = document.querySelector('CSSセレクタ名');
+// 対象のHTML要素に、event発生時に実行される関数を登録
 element.addEventListener('event名', function() {
-    // 処理
+    // event発生時に実行される処理
 });
 ```
 
