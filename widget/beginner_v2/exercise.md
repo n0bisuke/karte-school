@@ -3,12 +3,18 @@
 - テスト配信で動作を確認し、挙動に問題がある場合はデバッグしてみましょう
 
 ## 演習1: シンプルな診断コンテンツ
+### 想定シナリオ
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/exercise_shindan_design.png" width="800px">
+
 ### 最低限のカスタマイズ
 以下の要件を満たすように、アクションをカスタマイズします
 
 - [ ] 元のテンプレートは、以下
     - ユーザーに見せる > 旧テンプレート > ポップアップ > 「画像+テキスト+複数リンク（2リンク）( ID: C000028 )」
         - 「 ID: C000020 」と名前が同じなので注意
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/c000028.png" width="300px">
+
 - [ ] 「ベーシック」タブの「アクション設定」で以下の変数の値を変更
     - [ ] 見出し: `商品カテゴリー診断！`
     - [ ] 詳細文: `あなたにおすすめの商品カテゴリーを診断しますか？`
@@ -18,9 +24,15 @@
     - [ ] ボタンB
         - [ ] ボタンテキスト: `いいえ`
         - [ ] ボタン背景色: 青っぽい色
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/exercise_state1.png" width="300px">
+
 - [ ] ステート2を追加
     - [ ] 見出し: `自分磨きが好きだ`
     - [ ] 詳細文は不要なので、要素ごと削除
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/exercise_state2.png" width="300px">
+
 - [ ] ステート1の「はい」を押したらステート2に遷移する
 - [ ] ステート2と同様に、ステート3と4を追加
     - [ ] ステート3
@@ -36,6 +48,9 @@
     - [ ] ボタンは、リンク1つのみ（この時点では、スタイルが崩れる）
         - [ ] ボタンテキスト: `アクセサリーカテゴリへ`
         - [ ] リンク先URL: `#accessories` （適当なURLがある場合はそれを設定）
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/exercise_state5.png" width="300px">
+
 - [ ] ステート5と同様に、ステート6〜8を追加
     - [ ] ステート6
         - [ ] 見出し: `健康志向のあなたにはヘルスケアがおすすめ`
