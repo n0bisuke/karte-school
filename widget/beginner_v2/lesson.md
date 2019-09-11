@@ -1018,7 +1018,7 @@ element.addEventListener('event名', function() {
         - event発生時の処理は、`要素.addEventListener('event名', function() { 処理 })`と書くことで追加できます
 
 ### 事後課題の確認
-- https://github.com/plaidev/karte-school/blob/master/widget/beginner/post_homework.md
+- https://github.com/plaidev/karte-school/blob/master/widget/beginner_v2/exercise.md
 
 ### 今後の学習
 - プログラミング学習のコツは、失敗を恐れずにひたすら「try! try! try!」すること
