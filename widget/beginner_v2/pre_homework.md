@@ -26,7 +26,7 @@
 ### カスタマイズする接客サービスをテスト配信できる状態にしておいてください
 - 本コース中に、接客サービスを本番環境でテスト配信するようなワークがあります
 - [ ] 以下の記事を参考に、ご自身のテストセグメントの作成をお願いします
-    - [特定ユーザーにのみテスト配信することはできますか？ | KARTEサポートサイト](https://support2.karte.io/note/note-test/1313/)
+    - [特定ユーザーにのみテスト配信することはできますか？ | KARTEサポートサイト](https://support.karte.io/post/64kMz95EExPt5RdnmdcTk1)
 
 <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner_v2/_images/b000023.png" width="300px">
 
