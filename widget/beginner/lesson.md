@@ -493,7 +493,7 @@ tracker.track(eventName, {
 - Scriptの`widget.show()`の部分を、以下のように書き換えます
 
 ```js
-var lastState = [[lastState]];
+var lastState = #{lastState};
 if (lastState === '2') {
     widget.setState(2);
 } else {
@@ -575,7 +575,7 @@ if (lastState === '2') {
     - ifの条件内を以下のように修正します
 
 ```js
-var lastState = [[lastState]];
+var lastState = #{lastState};
 if (lastStata === '2') { // lastState -> lastStataにしてみる
     widget.setState(2);
 } else {
@@ -605,7 +605,7 @@ karte.tracker error: ReferenceError: lastStata is not defined
 - 今度は、以下のようにScriptに3つのログ出力処理を追加してみます
 
 ```js
-var lastState = [[lastState]];
+var lastState = #{lastState};
 console.log("lastState: " + lastState);
 if (lastState === '2') {
     console.log("分岐1です！");
@@ -633,7 +633,7 @@ if (lastState === '2') {
     - 現在のステートは、`widget.getState()`で取得することができます
 
 ```js
-var lastState = [[lastState]];
+var lastState = #{lastState};
 if (lastState === '2') {
     widget.setState(2);
 } else {
@@ -730,7 +730,7 @@ widget.method('autoClick', function() {
 - Scriptの以下の部分をコメントアウトし、`widget.show()`だけに戻します
 
 ```js
-// var lastState = [[lastState]];
+// var lastState = #{lastState};
 // console.log("lastState: " + lastState);
 // if (lastState === '2') {
 //     console.log("分岐1です！");

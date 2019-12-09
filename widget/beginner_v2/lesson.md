@@ -679,7 +679,7 @@ tracker.track(eventName, {
 
 ```js
 // 変数lastStateに前回のステート値を格納
-var lastState = [[lastState]];
+var lastState = #{lastState};
 // もしlastStateの値が'0'だったら
 if (lastState === '0') {
     // ステート1を初期表示
@@ -760,7 +760,7 @@ if (lastState === '0') {
     - ifの条件内を以下のように修正します
 
 ```js
-var lastState = [[lastState]];
+var lastState = #{lastState};
 if (lastState === '0') {
     widget.setState(1);
 } else if (lastState === '2') {
@@ -791,7 +791,7 @@ karte.tracker error: ReferenceError: lastStata is not defined
 - 今度は、以下のようにScriptに3つのログ出力処理を追加してみます
 
 ```js
-var lastState = [[lastState]];
+var lastState = #{lastState};
 // 変数lastStateの値をログに出力
 console.log("lastState: " + lastState);
 if (lastState === '0') {
@@ -921,7 +921,7 @@ widget.method('autoClick', function() {
         - Mac: `[Cmd] + [/]`
 
 ```js
-// var lastState = [[lastState]];
+// var lastState = #{lastState};
 // if (lastState === '0') {
 //     widget.setState(1);
 // } else if (lastState === '2') {
