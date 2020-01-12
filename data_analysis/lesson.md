@@ -19,8 +19,8 @@
 - このコースは、非エンジニアの方の受講を想定したものです
 - SQLについては、細かい文法解説よりも、「SQLを書くと何ができるか」を体感することを重視しています
 
-### 事前課題の確認
-- https://github.com/plaidev/karte-school/blob/master/widget/beginner/pre_homework.md
+### 事前準備の確認
+- https://github.com/plaidev/karte-school/blob/master/data_analysis/pre_homework.md
 
 ## 「もっとユーザーについて知る」ために、なぜデータ分析スキルが必要か？
 - KARTEの機能を使っても、決まった切り口であれば、かなりユーザーについて知ることができます
