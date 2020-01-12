@@ -51,7 +51,7 @@ csvファイル名 | 概要
 `access_logs.csv` | Webのアクセスログ
 `users.csv` | ユーザーの属性情報
 
-## まずはGoogleスプレッドシートでやってみる
+## まずはGoogleスプレッドシートでアクセス集計をやってみる
 - Webのアクセスログ自体に慣れるために、まずはGoogleスプレッドシートを使ってサンプルデータを集計してみます
 - 事前準備で用意したGoogleスプレッドシートを開いてください
 
@@ -91,7 +91,7 @@ csvファイル名 | 概要
 - 追加の演習
     - 年齢毎のPV数、セッション数、UU数も同様に集計してみましょう
 
-## 同じことをSQLでやってみる
+## 同じアクセス集計をSQLでやってみる
 - Googleスプレッドシートで実施したのと同じ操作を、KARTE DatahubのSQLでやってみましょう
 - 事前準備で用意したDatahubのデータセット画面を開きます
 
@@ -134,8 +134,8 @@ sync_date | user_id | session_id
 ... | ... | ...
 
 - クエリの名称を変更し、名称を保存します
-    - 例
-        - `access_logs全件抽出`
+    - クエリ名
+        - `access_logs抽出`
 - 右上の[保存]ボタンを押してクエリを保存します
 - 左上の[フォルダを作成]ボタンを押します
     - フォルダ名を入力します
@@ -150,7 +150,7 @@ sync_date | user_id | session_id
         - `user_id`
         - `age`
     - クエリ名
-        - `users全件抽出`
+        - `users抽出`
 
 ### SELECT 列名 FROM テーブル名
 - SELECT文
@@ -372,3 +372,397 @@ logs.sync_date | logs.user_id | logs.session_id | logs.origin | logs.path | user
             - 年齢別のセッション数
     - クエリ名
         - `年齢毎のaccess_logs集計`
+
+## SQLの抽出結果を加工して見やすくする
+- 「ユーザー毎のaccess_logs集計」のクエリ結果をより見やすくするために、下記のように加工してみます
+    - PV数が多い順に並び替える
+    - 上位5位のみ出力する
+    - 特定のユーザーの結果だけを抽出する
+    - 5セッション以上閲覧しているユーザーの結果だけを抽出する
+
+### ワーク: 出力結果を並び替える
+- 「ユーザー毎のaccess_logs集計」のクエリを編集し、PV数の降順で並び替えます
+
+user_id | pv | session
+-- | -- | --
+vis-PS3T | 61 | 11
+vis-6SBU | 39 | 2
+vis-5JAW | 35 | 2
+... | ... | ...
+
+- 末尾に`ORDER BY pv DESC`を追加し、実行します
+
+```sql
+SELECT
+  user_id
+  , COUNT(*) AS pv
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+GROUP BY user_id
+ORDER BY pv DESC
+```
+
+- 次に、セッション数の降順で並び替えます
+    - `ORDER BY pv DESC`の前に`-- `と書いてコメントアウトします
+    - 代わりに`ORDER BY session DESC`を追加し、実行します
+
+```sql
+SELECT
+  user_id
+  , COUNT(*) AS pv
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+GROUP BY user_id
+-- ORDER BY pv DESC
+ORDER BY session DESC
+```
+
+- クエリを保存します
+
+### ORDER BYによる並び替え
+- `ORDER BY 列名`を使うことで、指定した列を用いて出力結果を並び替えることができます
+    - スプレッドシートのフィルタ&並び替え機能と同様
+- デフォルトでは昇順になりますが、`ORDER BY 列名 DESC`と書くことで降順を指定できます
+    - `ASC`
+        - 昇順（デフォルト）
+        - ascending orderの略
+    - `DESC`
+        - 降順
+        - descending orderの略
+
+### SQLのコメントアウト
+- コメント
+    - 実行時に特に意味を持たないメモのこと
+    - SQLでは、下記のように記述します
+        - `-- コメント`
+    - SQLに限らず、HTML/CSS/JavaScriptなどでもそれぞれの記述方法があります
+- コメントアウト
+    - プログラムの一部をコメント化して一時的に除外すること
+    - 後でまた使うかもしれない部分をとっておくために使いましょう
+    - 例
+        - `-- ORDER BY pv DESC`
+- コメントアウトのショートカットキー
+    - コメントアウトしたい行にカーソルを置くか、複数行を選択した状態で、下記を同時押しします
+        - Windows
+            - `Ctrl + /`
+        - Mac
+            - `Cmd + /`
+
+### 演習: アクセスログを日付順に並び替える
+- 「access_logs抽出」のクエリを編集し、`sync_date`の降順に並び替えましょう
+- 今度は、降順指定をコメントアウトし、昇順に並び替えましょう
+- 編集したクエリは保存します
+
+### ワーク: 出力結果に表示する行数を絞って、上位5位のみ表示する
+- 「ユーザー毎のaccess_logs集計」のクエリを編集し、PV数の上位5位だけを出力するようにします
+
+user_id | pv | session
+-- | -- | --
+vis-PS3T | 61 | 11
+vis-6SBU | 39 | 2
+vis-5JAW | 35 | 2
+vis-6TGK | 33 | 1
+vis-O2OP | 32 | 6
+
+- `ORDER BY session DESC`をコメントアウトします
+- `ORDER BY pv DESC`のコメントアウトを戻します
+- 末尾に`LIMIT 5`を追加し、実行します
+
+```sql
+SELECT
+  user_id
+  , COUNT(*) AS pv
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+GROUP BY user_id
+ORDER BY pv DESC
+-- ORDER BY session DESC
+LIMIT 5
+```
+
+- クエリを保存します
+
+### LIMITで出力する行数を指定する
+- `LIMIT`を使うことで、出力結果に含める行数を指定することができます
+- `ORDER BY`と`LIMIT`を組み合わせて使うことで、「上位N件」などの表示が可能です
+    - 例
+        - `ORDER BY pv DESC LIMIT 5`
+- ちなみに、Datahubのテーブル画面で[クエリを作成]ボタンを押した場合に自動で作成されるクエリにも、末尾に`LIMIT 1000`と記述されていました
+    - 巨大なテーブルに対して不用意に重いクエリを実行してしまうことを避けるために、自動で`LIMIT`が付与されます
+
+### 演習: アクセスログの最新の10行を出力する
+- 「access_logs抽出」のクエリを編集し、sync_dateが最も新しい10行だけを出力するようにしましょう
+- 編集したクエリは保存します
+
+### ワーク: 特定のユーザーの集計結果だけに絞り込む
+- まず、特定のユーザーのaccess_logsをそのまま抽出してみます
+    - ここでは、user_idが`vis-2JKE`の行を抽出します
+
+user_id | sync_date | session_id | path
+-- | -- | -- | --
+vis-2JKE | 2020-01-02T12:40:54.747Z | vis-2JKE_27 | /
+vis-2JKE | 2020-01-02T14:29:18.812Z | vis-2JKE_28 | /
+vis-2JKE | 2020-01-03T13:33:12.252Z | vis-2JKE_29 | /
+... | ... | ... | ...
+
+- 下記の内容でクエリを新規作成し、実行します
+
+```sql
+SELECT
+  user_id
+  , sync_date
+  , session_id
+  , path
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+WHERE user_id = "vis-2JKE"
+ORDER BY sync_date
+```
+
+- クエリ名を変更します
+    - `特定ユーザーの抽出・集計`
+- 作成したクエリはこのコース用のクエリフォルダに格納します
+- 次に、「ユーザー毎のaccess_logs集計」のクエリを参考に、user_idが`vis-2JKE`の行だけを集計してみます
+
+user_id | pv | session
+-- | -- | --
+vis-2JKE | 23 | 17
+
+- 元のクエリを全てコメントアウトし、集計用のクエリを追記します
+
+```sql
+-- SELECT
+--   user_id
+--   , sync_date
+--   , session_id
+--   , path
+-- FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+-- WHERE user_id = "vis-2JKE"
+-- ORDER BY sync_date
+
+SELECT
+  user_id
+　, COUNT(*) AS pv
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+WHERE user_id = "vis-2JKE"
+GROUP BY user_id
+```
+
+- クエリを実行し、結果を確認します
+- クエリを保存します
+
+### WHEREで抽出する対象を絞り込む
+- `WHERE`を使うことで、抽出・集計する対象の行を絞り込むことができます
+- `WHERE`の直後には、結果がTRUEかFALSEになるような条件式を記述します
+    - 例
+        - `WHERE user_id = "vis-2JKE"`
+        - `WHERE age < 30`
+        - `WHERE age >= 20`
+- 条件式は、`AND`や`OR`でつなげることもできます
+    - 例
+        - `WHERE age >= 20 AND age < 30`
+        - `WHERE user_id = "vis-2JKE" OR user_id = "vis-NALM"`
+- 条件式は、`NOT`でTRUEとFALSEを反転させることができます
+    - 例
+        - `WHERE NOT user_id = "vis-2JKE"`
+
+### 演習: 年齢や性別でusersを絞り込む
+- 「users抽出」のクエリを順次編集して実行し、下記の条件で絞り込んで表示してみましょう
+    - 「22歳未満」のユーザー
+    - 「50歳以上」かつ「女性」のユーザー
+    - 「user_idがvis-PS3T, vis-6SBU, vis-5JAWのいずれか」のユーザー
+
+### 5セッション以上閲覧しているユーザーの集計結果だけを出力する
+- 「ユーザー毎のaccess_logs集計」のクエリを編集し、「5セッション以上閲覧しているユーザー」に限定して結果を出力することを考えます
+    - `LIMIT 5`は使わないのでコメントアウトします
+    - `ORDER BY pv DESC`をコメントアウトし、`ORDER BY session DESC`のコメントアウトを戻します
+
+
+```sql
+SELECT
+  user_id
+  , COUNT(*) AS pv
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+GROUP BY user_id
+-- ORDER BY pv DESC
+ORDER BY session DESC
+-- LIMIT 5
+```
+
+
+- まず、下記のようにWHEREを足して実行し、エラーになることを確認します
+
+```sql
+SELECT
+  user_id
+  , COUNT(*) AS pv
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+WHERE session >= 5
+GROUP BY user_id
+-- ORDER BY pv DESC
+ORDER BY session DESC
+-- LIMIT 5
+```
+
+- エラー内容
+    - `Unrecognized name: session; Did you mean session_id?`
+- 今度は、WHEREをGROUP BYの後に移動して実行し、再びエラーになることを確認します
+
+```sql
+SELECT
+  user_id
+  , COUNT(*) AS pv
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+GROUP BY user_id
+WHERE session >= 5
+-- ORDER BY pv DESC
+ORDER BY session DESC
+-- LIMIT 5
+```
+
+- エラー内容
+    - `Syntax error: Unexpected keyword WHERE`
+- `WHERE`を`HAVING`に書き換えて実行し、期待した結果が得られることを確認します
+
+```sql
+SELECT
+  user_id
+  , COUNT(*) AS pv
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+GROUP BY user_id
+HAVING session >= 5
+-- ORDER BY pv DESC
+ORDER BY session DESC
+-- LIMIT 5
+```
+
+- クエリを保存します
+
+### 集計結果に対する絞り込みは、WHEREではなくHAVINGを使う
+- WHEREは、抽出・集計する前のテーブルに対して、「事前」に絞り込みをするために使います
+    - 条件式には、「抽出・集計する前のテーブル」の列名だけを使うことができます
+- 集計結果に対する「事後」の絞り込みは、WHEREではなく`HAVING`を使います
+- `HAVING`の直後には、WHEREと同様に条件式を指定します
+    - 条件式には、「抽出・集計した結果」の列名だけを使うことができます
+    - 例
+        - `HAVING user_id = "vis-2JKE"`
+        - `HAVING session >= 5`
+        - `HAVING session >= 5 AND pv >= 10`
+
+### 演習: PV数の多いページpathを特定する
+- 「path毎のaccess_logs集計」のクエリを編集し、下記の条件を付け加えましょう
+    - pathが"/"ではない
+    - PV数が30以上
+- クエリを保存します
+
+### コラム: 実行順序は、FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER → LIMITの順番
+- SQLの命令が増えてくると、実際に実行される順番を意識しないと書き方がわからなくなってしまいます
+- 下記のクエリの実行順序を考えます
+    - 「PVが20以上の女性ユーザーについて、最大3行をPV数の降順で出力する」
+
+```sql
+SELECT
+  logs.user_id AS user_id
+  , COUNT(*) AS pv
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs` AS logs
+INNER JOIN `prd-karte-per-client.karte_school_{{api_key}}.users` AS users
+  ON logs.user_id = users.user_id
+WHERE users.gender = "woman"
+GROUP BY logs.user_id
+HAVING pv >= 20
+ORDER BY pv DESC
+LIMIT 3
+```
+
+- 実行順序は、主に記述された順番（上から下）となっています
+    - SELECTだけは例外
+- 実行イメージは、下記の通りです
+- `FROM`で、access_logsテーブルを全件取ってくる
+
+sync_date | user_id | session_id | origin | path
+-- | -- | -- | -- | --
+2020-01-04T12:20:44.051Z | vis-PS3T | vis-PS3T_267 | https://cxclip.karte.io | /
+... | ... | ... | ... | ...
+
+- `JOIN`で、usresテーブルを結合される
+
+logs.sync_date | logs.user_id | logs.session_id | logs.origin | logs.path | users.age | users.gender
+-- | -- | -- | -- | -- | -- | --
+2020-01-04T12:20:44.051Z | vis-PS3T | vis-PS3T_267 | https://cxclip.karte.io | / | 50 | woman
+... | ... | ... | ... | ... | ... | ...
+
+- `WHERE`で、users.genderが"woman"の行だけに絞り込まれる
+- `GROUP BY`で、user_idが共通のグループ毎に集約される
+    - ここで、`SELECT`で指定された集計方法が使われる
+
+user_id | pv
+-- | --
+vis-PS3T | 61
+... | ...
+
+- `HAVING`で、pvが20以上の行だけに絞り込まれる
+- `ORDER BY`で、pvの降順に並び替えられる
+- `LIMIT`で、もし3行以上あったら3行目まで出力される
+
+### ワーク: GROUP BYにまつわるよくあるエラーを体験する
+- 直前のコラムで見た下記の内容でクエリを新規作成し、実行します
+
+```sql
+SELECT
+  logs.user_id AS user_id
+  , COUNT(*) AS pv
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs` AS logs
+INNER JOIN `prd-karte-per-client.karte_school_{{api_key}}.users` AS users
+  ON logs.user_id = users.user_id
+WHERE users.gender = "woman"
+GROUP BY logs.user_id
+HAVING pv >= 20
+ORDER BY pv DESC
+LIMIT 3
+```
+
+- クエリ名を変更します
+    - `SQLの実行順序確認用の全部盛りクエリ`
+- 作成したクエリはこのコース用のクエリフォルダに格納します
+- クエリを順次編集して実行し、エラーが出ることを確認します
+- `GROUP BY`していないusers.genderを、`SELECT`で指定します
+    - `SELECT list expression references users.gender which is neither grouped nor aggregated`
+
+```sql
+SELECT
+  logs.user_id AS user_id
+  , users.gender AS gender
+  , COUNT(*) AS pv
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs` AS logs
+INNER JOIN `prd-karte-per-client.karte_school_{{api_key}}.users` AS users
+  ON logs.user_id = users.user_id
+WHERE users.gender = "woman"
+GROUP BY logs.user_id
+HAVING pv >= 20
+ORDER BY pv DESC
+LIMIT 3
+```
+
+- `, users.gender AS gender`を削除します
+- 今度は、`GROUP BY`と`HAVING`をコメントアウトして実行し、エラーが出ることを確認します
+
+```sql
+SELECT
+  logs.user_id AS user_id
+  , COUNT(*) AS pv
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs` AS logs
+INNER JOIN `prd-karte-per-client.karte_school_{{api_key}}.users` AS users
+  ON logs.user_id = users.user_id
+WHERE users.gender = "woman"
+-- GROUP BY logs.user_id
+-- HAVING pv >= 20
+ORDER BY pv DESC
+LIMIT 3
+```
+
+- 今度は、`GROUP BY`と`HAVING`をコメントアウト戻して、クエリを保存します
+
