@@ -680,7 +680,8 @@ LIMIT 3
 
 - 実行順序は、主に記述された順番（上から下）となっています
     - SELECTだけは例外
-- 実行イメージは、下記の通りです
+- 特に、`GROUP BY`は集約される前後で使用できる列が変わるので重要です
+- 上記クエリの実行イメージは、下記の通りです
 - `FROM`で、access_logsテーブルを全件取ってくる
 
 sync_date | user_id | session_id | origin | path
@@ -764,5 +765,186 @@ ORDER BY pv DESC
 LIMIT 3
 ```
 
-- 今度は、`GROUP BY`と`HAVING`をコメントアウト戻して、クエリを保存します
+- 今度は、`GROUP BY`と`HAVING`のコメントアウトを戻して、クエリを保存します
+
+## 小さなSELECT文の組み合わせで複雑なSQLを作る
+- すぐに記述方法が思いつかないような複雑なSQLでも、小さなSELECT文の組み合わせで作成することができます
+- ここでは、下記のようなクエリを作成します
+    - 「期間中に3セッション以上来ているユーザーについて、5PV以上あったセッションの閲覧ページpathを時系列で見たい」
+- 一般的に、大きな課題は小さな課題に分解してから考えた方が解きやすくなります
+- このクエリも、下記の3つのクエリを組み合わせれば作成できそうです
+    - 期間中に3セッション以上来ているユーザーのuser_idを抽出するクエリ
+    - 5PV以上あったセッションのsession_idを抽出するクエリ
+    - アクセスログをsync_dateの昇順で表示するクエリ
+
+### WITHでSELECT文の結果を一時的なテーブルとして再利用する
+- SQLでは、SELECT文の結果をさらに別のSELECT文のFROMに指定することができます
+- `WITH`を使うと、SELECT文の結果に名前を付けることができます
+    - 名前を付けたSELECT文の結果も、一時的なテーブルとして別のSELECT文のFROMに指定できます
+- 2つ目以降は、`WITH`の部分にカンマを書きます
+
+```sql
+WITH logs AS (
+  SELECT
+    sync_date
+    , user_id
+    , session_id
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+)
+, users AS (
+  SELECT
+    user_id
+    , gender
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.users`
+)
+SELECT
+    logs.session_id AS session_id
+    , users.gender AS gender
+FROM logs
+INNER JOIN users
+  ON logs.user_id = usres.user_id
+```
+
+### ワーク: WITHを組み合わせて30行以上の長いクエリを書いてみる
+- 前述したクエリを作成していきます
+    - 「期間中に3セッション以上来ているユーザーについて、5PV以上あったセッションの閲覧ページpathを時系列で見たい」
+- 空のクエリを新規作成し、クエリ名を変更します
+    - `WITHを連結して複雑な条件で絞り込み`
+- クエリ名を変更します
+    - `全体access_logs集計`
+- 作成したクエリはこのコース用のクエリフォルダに格納します
+- まず、「期間中に3セッション以上来ているユーザーのuser_idを抽出するクエリ」を作成します
+
+```sql
+SELECT
+  user_id
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+GROUP BY user_id
+HAVING session >= 3
+```
+
+- `WITH`を使って、実行結果に`often_visited_users`という名前をつけます
+    - そのままSELECT文で抽出して、結果を確認します
+
+```sql
+WITH often_visited_users AS (
+  SELECT
+    user_id
+    , COUNT(DISTINCT session_id) AS session
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+  GROUP BY user_id
+  HAVING session >= 3
+)
+SELECT * FROM often_visited_users
+```
+
+- 同様に、「5PV以上あったセッションのsession_idを抽出するクエリ」を追加します
+    - `sessions_with_many_pv`という名前を付けます
+    - そのままSELECT文で抽出して、結果を確認します
+
+```sql
+WITH often_visited_users AS (
+  SELECT
+    user_id
+    , COUNT(DISTINCT session_id) AS session
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+  GROUP BY user_id
+  HAVING session >= 3
+)
+, sessions_with_many_pv AS (
+  SELECT
+    session_id
+    , COUNT(*) AS pv
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+  GROUP BY session_id
+  HAVING pv >= 3
+)
+SELECT * FROM sessions_with_many_pv
+```
+
+- これで、抽出対象のuser_idとsession_idの用意ができました
+- 次に、まずは抽出対象のuser_idにマッチするアクセスログだけに絞り込みます
+    - `INNER JOIN`は両方のテーブルに含まれる結果しか出力しないので、これを利用して絞り込みます
+    - `logs_filtered_by_user`という名前を付けます
+    - 結果は、session_id, sync_dateの順番に昇順で表示します
+
+```sql
+WITH often_visited_users AS (
+  SELECT
+    user_id
+    , COUNT(DISTINCT session_id) AS session
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+  GROUP BY user_id
+  HAVING session >= 3
+)
+, sessions_with_many_pv AS (
+  SELECT
+    session_id
+    , COUNT(*) AS pv
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+  GROUP BY session_id
+  HAVING pv >= 3
+)
+, logs_filtered_by_user AS (
+  SELECT
+    logs.sync_date AS sync_date
+    , logs.session_id AS session_id
+    , logs.path AS path
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs` AS logs
+  INNER JOIN often_visited_users AS target_users
+  ON logs.user_id = target_users.user_id
+)
+SELECT * FROM logs_filtered_by_user ORDER BY session_id, sync_date
+```
+
+- 最後に、抽出対象のsession_idにマッチするアクセスログだけに絞り込みます
+    - `logs_filtered_by_user_and_session`という名前を付けます
+    - 結果は、session_id, sync_dateの順番に昇順で表示します
+
+```sql
+WITH often_visited_users AS (
+  SELECT
+    user_id
+    , COUNT(DISTINCT session_id) AS session
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+  GROUP BY user_id
+  HAVING session >= 3
+)
+, sessions_with_many_pv AS (
+  SELECT
+    session_id
+    , COUNT(*) AS pv
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+  GROUP BY session_id
+  HAVING pv >= 5
+)
+, logs_filtered_by_user AS (
+  SELECT
+    logs.sync_date AS sync_date
+    , logs.session_id AS session_id
+    , logs.path AS path
+  FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs` AS logs
+  INNER JOIN often_visited_users AS target_users
+  ON logs.user_id = target_users.user_id
+)
+, logs_filtered_by_user_and_session AS (
+  SELECT
+    logs.sync_date AS sync_date
+    , logs.session_id AS session_id
+    , logs.path AS path
+  FROM logs_filtered_by_user AS logs
+  INNER JOIN sessions_with_many_pv AS target_sessions
+  ON logs.session_id = target_sessions.session_id
+)
+
+SELECT
+  sync_date
+  , session_id
+  , path
+FROM logs_filtered_by_user_and_session ORDER BY session_id, sync_date
+```
+
+- 出力結果を眺めて、どんなことがわかるか考えてみましょう
+- クエリを保存します
 
