@@ -2,6 +2,8 @@
 ## サンプルデータのダウンロード
 - 下記のcsvファイルをダウンロードしてください
 
+[KARTE School データ分析SQL入門.zip](https://github.com/plaidev/karte-school/files/4051746/KARTE.School.SQL.zip)
+
 ## Googleスプレッドシートへのデータアップロード
 - スプレッドシートを新規作成します
     - `KARTE: もっとユーザーについて知るためのデータ分析入門` など適当な名前を付けます
