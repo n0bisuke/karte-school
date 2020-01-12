@@ -1,4 +1,4 @@
-# もっとユーザーについて知るためのデータ分析入門: レッスン
+# もっとユーザーについて知るためのデータ分析SQL入門: レッスン
 ## はじめに
 ### インストラクター紹介
 - https://github.com/plaidev/karte-school/tree/master/_instructors
@@ -948,3 +948,146 @@ FROM logs_filtered_by_user_and_session ORDER BY session_id, sync_date
 - 出力結果を眺めて、どんなことがわかるか考えてみましょう
 - クエリを保存します
 
+## SQLでできる他のこと
+- 以上でワークは終了です、お疲れ様でした！
+- 今後、SQLを実践していくために、SQLでできることと関連する関数や演算子を簡単に紹介します
+    - 詳細の解説はしないので、興味がある方は調べてみてください
+        - 参考: [標準 SQL 関数と演算子  |  BigQuery  |  Google Cloud](https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
+
+### 文字列操作
+- 複数の文字列を結合する
+    - `CONCAT(origin, path)`
+- 正規表現に一致する部分だけを抽出する
+    - `REGEXP_EXTRACT(email, r"^[a-zA-Z0-9_.+-]+")`
+- JSONの中身を参照する
+    - `JSON_EXTRACT_SCALAR()`
+
+### 日時の操作
+- クエリ実行時点の時刻を生成する
+    - `CURRENT_TIMESTAMP()`
+- 時刻の計算をする
+    - `TIMESTAMP_ADD(TIMESTAMP "2008-12-25 15:30:00 UTC", INTERVAL 10 MINUTE)`
+
+### 集計
+- 条件に合致する行だけCOUNTする
+    - `COUNTIF(age >= 20)`
+- 主に数値を集計する
+    - `MAX(age)`
+    - `MIN(age)`
+    - `SUM(pv)`
+    - `AVG(age)`
+
+### その他
+- 行に番号を振る
+    - `ROW_NUMBER()`
+    - `RANK()`
+- 文字列を配列化する
+    - `SPLIT("a,b,c,d")`
+- 配列を別々の行にバラす
+    - `UNNEST`
+
+## BigQueryとDatahub
+- Datahubでは、裏側でBigQueryというデータベース製品を使っています
+
+### BigQueryのStandard SQL
+- [BigQuery](https://cloud.google.com/bigquery/?hl=ja)
+    - クラウドサービスとしてGoogleが提供しているデータベースです
+    - 数億行規模のテーブルであっても、高速に集計することができます
+- Datahubで記述するSQLは、BigQueryの「標準SQL」と呼ばれるSQLです
+- 実は、データベース製品の機能の違いなどによって、SQLには微妙に方言があります
+    - あるデータベースに対するSELECT文が、別のデータベースでは動かないケースがあります
+- ただし、アメリカで学んだ英語がイギリスでも使えるように、BigQueryの標準SQLを学ぶことで、他のデータベースのSQLもすぐに書くことができるようになります
+
+### Datahubでできること
+- Datahubでは、BigQueryを拡張していくつかの機能を追加しています
+- 最大の特徴は、KARTEのプロジェクトで発生したイベントログが全て格納されたテーブルが用意されていることです
+    - 参考: [karte_eventテーブルへのクエリを作成する](https://developers.karte.io/docs/datahub-karte_event-table)
+    - 注意
+        - karte_eventテーブルはとても大規模なテーブルなので、長期間のクエリを
+- クエリの一部を「パラメータ化」し、GUIで設定できる機能もあります
+- 「特定ユーザーの抽出・集計」のクエリで、検索対象のuser_idをパラメータ化してみます
+
+```sql
+-- SELECT
+--   user_id
+--   , sync_date
+--   , session_id
+--   , path
+-- FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+-- WHERE user_id = "{{user_id}}"
+-- ORDER BY sync_date
+
+SELECT
+  user_id
+  , COUNT(*) AS pv
+  , COUNT(DISTINCT session_id) AS session
+FROM `prd-karte-per-client.karte_school_{{api_key}}.access_logs`
+WHERE user_id = "{{user_id}}"
+GROUP BY user_id
+```
+
+- パラメータエディタには、パラメータの設定をyamlと呼ばれる記法で記述します
+    - 参考: [クエリパラメータを利用する](https://developers.karte.io/docs/use-datahub-query-parameter)
+
+```yml
+user_id:
+  type: text
+  label: 抽出対象のuser_id
+  value: vis-2JKE
+```
+
+- また、KARTEでよく使われるクエリは「クエリコレクション」からダウンロードして使うことができます
+    - 参考: [クエリコレクションを活用する](https://developers.karte.io/docs/datahub-query-collection)
+- その他、クエリをKARTEで利用するための機能も多数用意されています
+    - クエリ結果を使って、メールをリスト配信する（ターゲット配信）
+    - クエリ結果をユーザーに紐付けて、セグメントの条件に使う（紐付けテーブル）
+    - クエリ結果を、アクションから参照する（アクションテーブル）
+    - クエリ結果をテーブルに保存し、外部のBIで可視化する
+
+### ワーク: karte_eventテーブルからアクセスログを抽出する
+- データセット画面から、下記のテーブルを開きます
+    - データセット
+        - `karte_stream_{{api_key}}`
+    - テーブル
+        - `karte_event_*`
+- [クエリを作成]ボタンを押します
+- 作成したクエリを、下記のように書き換えます
+    - `karte_event('YYYYMMDD', 'YYYYMMDD')`で抽出期間を指定できるので、日付を編集して今日だけを抽出するようにします
+        - 例
+            - `{{ karte_event('20200112', '20200112') }}`
+        - 記述を失敗すると、全期間のイベントを抽出する非常に重いクエリが実行されてしまうので、注意してください
+    - `LIMIT`を10件にします
+
+```sql
+SELECT * FROM {{ karte_event('YYYYMMDD', 'YYYYMMDD') }} LIMIT 10 -- YYYYMMDDには実際の日付が入る
+```
+
+- `SELECT`と`WHERE`の指定を追加し、下記のように書き換えて実行します
+
+```sql
+SELECT
+  sync_date
+  , user_id
+  , session_id
+  , JSON_EXTRACT_SCALAR(values, '$.view.access.uri.path') AS path
+FROM {{ karte_event('YYYYMMDD', 'YYYYMMDD') }} -- YYYYMMDDには実際の日付が入る
+WHERE
+  event_name = 'view'
+LIMIT 10
+```
+
+- これで、このコースで使ったaccess_logsテーブルとほぼ同じデータを、実際のKARTEのイベントから抽出することができます
+- クエリ名を変更します
+    - `karte_eventテーブルからアクセスログを抽出`
+- 作成したクエリはこのコース用のクエリフォルダに格納します
+
+## おわりに
+### 事後学習の確認
+- (TBD)
+- ぜひ、実践問題を通じてこのコースの内容を復習してください
+
+### 今後の学習
+- SQLを使ったデータ分析に慣れるためのコツは、失敗を恐れずにひたすら「try! try! try!」すること
+    - 書籍やオンライン学習コンテンツで学ぶのは、後からでも遅くない
+    - 「やってみる → 不明点にぶつかる → 調べる → わかる」のサイクルを回す
+    - 学習効率を上げるには、わかる人にとにかく質問すること
