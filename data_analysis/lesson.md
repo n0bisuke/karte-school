@@ -322,7 +322,7 @@ GROUP BY users.gender
 
 ### 4-11. JOINで複数テーブルを参照する
 - 性別の情報はaccess_logsテーブルには存在していないため、usersテーブルも合わせて抽出する必要があります
-- スプレッドシートでは`=VLOOPUP()`で外部テーブルを参照しました
+- スプレッドシートでは`=VLOOKUP()`で外部テーブルを参照しました
 - SQLでは、`JOIN`を使用することで、複数テーブルを結合した結果を「仮想的なテーブル」として利用できます
     - JOINにはいくつか種類がありますが、ここでは`INNER JOIN`を使用します
 - `JOIN`の直後には、`FROM`の直後と同様に、テーブル名を指定します
@@ -355,10 +355,10 @@ vis-G6N3 | 20 | woman
     - 列名が被る可能性があるので、内部的に`テーブル名.列名`という列名に変換されます
 
 logs.sync_date | logs.user_id | logs.session_id | logs.origin | logs.path | users.age | users.gender
--- | -- | -- | -- | --
+-- | -- | -- | -- | -- | -- | --
 2020-01-01T05:57:07.008Z | vis-MZPE | vis-MZPE_1 | https://cxclip.karte.io | / | 28 | woman
 2020-01-01T11:49:59.719Z | vis-G6N3 | vis-G6N3_1 | https://cxclip.karte.io | / | 20 | woman
-... | ... | ... | ... | ...
+... | ... | ... | ... | ... | ... | ...
 
 - JOINした結果の「仮想的なテーブル」は、通常のテーブルと同様にSELECT文で集計することができます
 
