@@ -16,9 +16,22 @@
 - [作成 > データセットを作成]からサンプルデータ用のデータセットを作成します
     - データセット名
         - `karte_school`
-- サイドバーからサンプルデータ用のデータセットを選択し、[テーブルを作成 > テーブルを作成]からテーブルを新規作成します
+- access_logsとusersのそれぞれについて、テーブルを新規作成します
+    - サイドバーから作成したデータセットを選択し、[テーブルを作成 > テーブルを作成]をクリック
+    - テーブル名とスキーマを、後述の表の通りに入力
+    - CSVファイルをアップロードします
 
-テーブル名 | スキーマ
--- | --
-`access_logs` | `sync_date:TIMESTAMP,user_id:STRING,session_id:STRING,origin:STRING,path:STRING`
-`users` | `user_id:STRING,age:INT64,gender:STRING`
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/inner_join.gif" width="300px">
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/csv_import.gif" width="300px">
+
+テーブル名 | CSVファイル名 | スキーマ
+-- | -- | --
+`access_logs` | `access_logs.csv` | `sync_date:TIMESTAMP,user_id:STRING,session_id:STRING,origin:STRING,path:STRING`
+`users` | `users.csv` | `user_id:STRING,age:INT64,gender:STRING`
+
+- [テーブル情報]から、正しくスキーマが設定されていることを確認します
+    - access_logsの`sync_date`が`TIMESTAMP`であること
+    - usersの`age`が`INTEGER`であること
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/check_scheme.gif" width="300px">
