@@ -364,7 +364,7 @@ logs.sync_date | logs.user_id | logs.session_id | logs.origin | logs.path | user
 - `INNER JOIN`で名寄せのキーとして利用した列の値が片方のテーブルにしかない場合、そのキーに対応するレコードは出力されません
     - これを利用して、テーブルAのレコードを、テーブルBに存在しているuser_idだけに絞り込んで出力する、といったことができます
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/inner_join.png" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/inner_join.png" width="500px">
 
 ### 4-12. 演習: 年齢毎にaccess_logsテーブルを集計する
 - 下記のクエリを作成します
