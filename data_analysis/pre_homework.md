@@ -21,14 +21,14 @@
     - テーブル名とスキーマを、後述の表の通りに入力
     - CSVファイルをアップロードします
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/input_scheme.png" width="500px">
-
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/csv_import.png" width="800px">
-
 テーブル名 | CSVファイル名 | スキーマ
 -- | -- | --
 `access_logs` | `access_logs.csv` | `sync_date:TIMESTAMP,user_id:STRING,session_id:STRING,origin:STRING,path:STRING`
 `users` | `users.csv` | `user_id:STRING,age:INT64,gender:STRING`
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/input_scheme.png" width="500px">
+
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/csv_import.png" width="800px">
 
 - [テーブル情報]から、正しくスキーマが設定されていることを確認します
     - access_logsの`sync_date`が`TIMESTAMP`であること
