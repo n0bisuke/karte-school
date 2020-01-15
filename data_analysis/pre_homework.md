@@ -21,9 +21,9 @@
     - テーブル名とスキーマを、後述の表の通りに入力
     - CSVファイルをアップロードします
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/inner_join.gif" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/inner_join.png" width="300px">
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/csv_import.gif" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/csv_import.png" width="300px">
 
 テーブル名 | CSVファイル名 | スキーマ
 -- | -- | --
@@ -34,4 +34,4 @@
     - access_logsの`sync_date`が`TIMESTAMP`であること
     - usersの`age`が`INTEGER`であること
 
-<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/check_scheme.gif" width="300px">
+<img src="https://raw.githubusercontent.com/plaidev/karte-school/master/data_analysis/_images/check_scheme.png" width="300px">
