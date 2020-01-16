@@ -1100,8 +1100,8 @@ LIMIT 10
         - 過度に大きい場合は、不要なデータを参照していないか見直す
 
 ## おわりに
-### 事後学習の確認
-- (TBD)
+### 事後課題について
+- https://github.com/plaidev/karte-school/blob/master/data_analysis/exercise.md
 - ぜひ、実践問題を通じてこのコースの内容を復習してください
 
 ### 今後の学習
