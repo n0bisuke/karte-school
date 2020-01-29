@@ -2,8 +2,8 @@
 
 ## はじめに
 
-- KARTE School 共通の事前準備・確認事項がこちらにまとまっているので、こちらも必ずご確認・ご準備ください
-- [ ] [[KARTE School 全クラス共通] 事前に確認していただきたい事項・準備していただきたいこと](https://github.com/plaidev/karte-school/blob/master/pre_homework.md)
+- [ ] KARTE School 共通の事前準備・確認事項がこちらにまとまっているので、こちらも必ずご確認・ご準備ください
+    - [[KARTE School 全クラス共通] 事前に確認していただきたい事項・準備していただきたいこと](https://github.com/plaidev/karte-school/blob/master/pre_homework.md)
 - [ ] 下記テンプレートを使用するので、このテンプレートを使ってテスト配信用接客サービスをご用意ください
     - 使用するテンプレート: ユーザーに見せる > 旧テンプレート > ポップアップ > 「上部画像+テキスト+ボタン (B000023)」
     - <img src="https://raw.githubusercontent.com/plaidev/karte-school/master/widget/beginner/_images/b000023.png" width="300px">
