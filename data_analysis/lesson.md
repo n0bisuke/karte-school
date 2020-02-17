@@ -1090,7 +1090,43 @@ LIMIT 10
     - `karte_eventテーブルからアクセスログを抽出`
 - 作成したクエリはこのコース用のクエリフォルダに格納します
 
-### 8-4. クエリリソース上限について
+### 8-4. ワーク: クエリコレクションを解読する
+- クエリ画面を開きます
+- [作成 > コレクションから作成]ボタンを押します
+- 検索Boxに`離脱`と入力し、Enterキーを押します
+- 結果に表示された「ページ別の離脱数」というクエリを選択します
+- クエリを開いて、中身を確認します
+
+```sql
+WITH view_data AS (
+  SELECT
+    user_id
+    , session_id
+    , sync_date
+    , JSON_EXTRACT_SCALAR(values, '$.view.access.uri.url') AS url
+    , ROW_NUMBER() over (PARTITION BY user_id, session_id ORDER BY sync_date DESC) AS order_num
+  FROM
+    {{ karte_event(period[0], period[1]) }}
+  WHERE
+    event_name = 'view'
+)
+SELECT
+  url
+  , COUNT(*) AS exit_num
+FROM
+  view_data
+WHERE
+  order_num = 1
+GROUP BY
+  url
+ORDER BY
+  exit_num DESC
+```
+
+- 上からクエリを眺めて、何をしているかを大まかに理解します
+    - クエリコレクションの複雑なクエリであっても、細かく分けて見ていくと、簡単なクエリの組み合わせであることがわかります
+
+### 8-5. クエリリソース上限について
 - Datahubでは、「月間使用クエリリソース」の上限が設定されています
     - プランによって、上限値は異なります
     - 使用状況や上限値は、[Datahub設定]画面から確認可能です
