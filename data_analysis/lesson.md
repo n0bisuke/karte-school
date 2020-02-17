@@ -666,7 +666,7 @@ ORDER BY session DESC
 
 ### 5-12. 演習: PV数の多いページpathを特定する
 - 「path毎のaccess_logs集計」のクエリを編集し、下記の条件を付け加えましょう
-    - originが"https://cxclip.karte.io"に等しいアクセスのみ集計
+    - originが`https://cxclip.karte.io`に等しいアクセスのみ集計
     - PV数が30以上のpathのPV数のみ出力
 - クエリを保存します
 
